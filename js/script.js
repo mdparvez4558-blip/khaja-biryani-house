@@ -1,22 +1,17 @@
-// Khaja Biryani House - Website JavaScript
+
+// Khaja Biryani House
 
 // Mobile menu
 const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
+const navMenu = document.getElementById("navMenu");
 
-if (menuBtn && navLinks) {
+if (menuBtn && navMenu) {
   menuBtn.addEventListener("click", function () {
-    navLinks.classList.toggle("active");
-  });
-
-  navLinks.querySelectorAll("a").forEach(function (link) {
-    link.addEventListener("click", function () {
-      navLinks.classList.remove("active");
-    });
+    navMenu.classList.toggle("active");
   });
 }
 
-// Order button
+// Menu order button
 function pick(food) {
   const foodSelect = document.getElementById("food");
 
@@ -29,7 +24,7 @@ function pick(food) {
   }
 }
 
-// Order form
+// Website order form → WhatsApp
 const orderForm = document.getElementById("orderForm");
 
 if (orderForm) {
@@ -47,23 +42,24 @@ if (orderForm) {
       return;
     }
 
-    alert(
-      "ধন্যবাদ " +
-      name +
-      "!\nআপনার " +
-      food +
-      " এর " +
-      quantity +
-      "টি অর্ডারের তথ্য গ্রহণ করা হয়েছে।"
-    );
+    const whatsappNumber = "8801785452580";
+
+    const message =
+      "🍛 খাজা বিরানি হাউজ - নতুন অর্ডার\n\n" +
+      "নাম: " + name + "\n" +
+      "ফোন: " + phone + "\n" +
+      "খাবার: " + food + "\n" +
+      "পরিমাণ: " + quantity + "\n" +
+      "ঠিকানা: " + address;
+
+    const whatsappURL =
+      "https://wa.me/" +
+      whatsappNumber +
+      "?text=" +
+      encodeURIComponent(message);
+
+    window.open(whatsappURL, "_blank");
 
     orderForm.reset();
   });
-}
-
-// Current year
-const year = document.getElementById("year");
-
-if (year) {
-  year.textContent = new Date().getFullYear();
 }
