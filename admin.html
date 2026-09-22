@@ -1,4 +1,268 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>খাজা বিরানি হাউজ - Admin Panel</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-top: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      background: #198754;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .logout {
+      background: #dc3545;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .item h3 {
+      margin-top: 0;
+    }
+
+    .status {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Login -->
+    <div id="loginBox" class="box">
+      <h1>🍛 খাজা বিরানি হাউজ</h1>
+      <div class="subtitle">Admin Login</div>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Admin Email"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button id="loginBtn">Login</button>
+
+      <div id="loginStatus" class="status"></div>
+    </div>
+
+
+    <!-- Admin Panel -->
+    <div id="adminBox" class="hidden">
+
+      <div class="box">
+        <h1>⚙️ Admin Panel</h1>
+        <div class="subtitle">খাজা বিরানি হাউজ</div>
+
+        <button id="logoutBtn" class="logout">
+          Logout
+        </button>
+      </div>
+
+
+      <!-- Site Information -->
+      <div class="box">
+
+        <h2>📞 যোগাযোগের তথ্য</h2>
+
+        <input
+          type="text"
+          id="phone1"
+          placeholder="প্রথম ফোন নম্বর"
+        >
+
+        <input
+          type="text"
+          id="phone2"
+          placeholder="দ্বিতীয় ফোন নম্বর"
+        >
+
+        <input
+          type="text"
+          id="address"
+          placeholder="ঠিকানা"
+        >
+
+        <button id="saveSiteBtn">
+          তথ্য সংরক্ষণ করুন
+        </button>
+
+        <div id="siteStatus" class="status"></div>
+
+      </div>
+
+
+      <!-- Menu -->
+      <div class="box">
+
+        <h2>🍛 মেনু</h2>
+
+        <input
+          type="text"
+          id="foodName"
+          placeholder="খাবারের নাম"
+        >
+
+        <textarea
+          id="foodDescription"
+          placeholder="খাবারের বিবরণ"
+        ></textarea>
+
+        <input
+          type="number"
+          id="foodPrice"
+          placeholder="দাম"
+        >
+
+        <button id="addFoodBtn">
+          নতুন খাবার যোগ করুন
+        </button>
+
+        <div id="menuList"></div>
+
+        <div id="menuStatus" class="status"></div>
+
+      </div>
+
+
+      <!-- Offer -->
+      <div class="box">
+
+        <h2>🎁 অফার</h2>
+
+        <input
+          type="text"
+          id="offerTitle"
+          placeholder="অফারের শিরোনাম"
+        >
+
+        <textarea
+          id="offerText"
+          placeholder="অফারের বিস্তারিত"
+        ></textarea>
+
+        <button id="saveOfferBtn">
+          অফার সংরক্ষণ করুন
+        </button>
+
+        <div id="offerStatus" class="status"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Firebase -->
+  <script type="module">
+
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      collection,
+      addDoc,
+      getDocs,
+      deleteDoc
+    } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+    /* =========================
+       FIREBASE CONFIG
+       ========================= */
+
+    
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAu6FHeFbK3GOaURfVhIdmhf54QKqrpOmA",
@@ -9,3 +273,407 @@ const firebaseConfig = {
   appId: "1:1098336642792:web:2780a67deda29759f5cb5d",
   measurementId: "G-992NHDK9ZL"
 };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+
+    /* =========================
+       ELEMENTS
+       ========================= */
+
+    const loginBox = document.getElementById("loginBox");
+    const adminBox = document.getElementById("adminBox");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const loginStatus =
+      document.getElementById("loginStatus");
+
+
+    /* =========================
+       ADMIN CHECK
+       ========================= */
+
+    async function checkAdmin(user) {
+
+      if (!user) {
+        loginBox.classList.remove("hidden");
+        adminBox.classList.add("hidden");
+        return;
+      }
+
+      try {
+
+        const adminRef =
+          doc(db, "admins", user.uid);
+
+        const adminSnap =
+          await getDoc(adminRef);
+
+        if (adminSnap.exists()) {
+
+          loginBox.classList.add("hidden");
+          adminBox.classList.remove("hidden");
+
+          loadSite();
+          loadMenu();
+          loadOffer();
+
+        } else {
+
+          await signOut(auth);
+
+          loginStatus.textContent =
+            "আপনার Admin অনুমতি নেই।";
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        loginStatus.textContent =
+          "Admin যাচাই করতে সমস্যা হয়েছে।";
+
+      }
+    }
+
+
+    onAuthStateChanged(auth, checkAdmin);
+
+
+    /* =========================
+       LOGIN
+       ========================= */
+
+    loginBtn.addEventListener("click", async () => {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      if (!email || !password) {
+
+        loginStatus.textContent =
+          "Email এবং Password দিন।";
+
+        return;
+      }
+
+      loginStatus.textContent =
+        "Login হচ্ছে...";
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        loginStatus.textContent = "";
+
+      } catch (error) {
+
+        console.error(error);
+
+        loginStatus.textContent =
+          "Login হয়নি। Email অথবা Password পরীক্ষা করুন।";
+      }
+
+    });
+
+
+    /* =========================
+       LOGOUT
+       ========================= */
+
+    logoutBtn.addEventListener("click", async () => {
+
+      await signOut(auth);
+
+    });
+
+
+    /* =========================
+       SITE INFORMATION
+       ========================= */
+
+    async function loadSite() {
+
+      try {
+
+        const ref =
+          doc(db, "site", "contact");
+
+        const snap =
+          await getDoc(ref);
+
+        if (snap.exists()) {
+
+          const data = snap.data();
+
+          document.getElementById("phone1").value =
+            data.phone1 || "";
+
+          document.getElementById("phone2").value =
+            data.phone2 || "";
+
+          document.getElementById("address").value =
+            data.address || "";
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+
+    document
+      .getElementById("saveSiteBtn")
+      .addEventListener("click", async () => {
+
+        const phone1 =
+          document.getElementById("phone1").value.trim();
+
+        const phone2 =
+          document.getElementById("phone2").value.trim();
+
+        const address =
+          document.getElementById("address").value.trim();
+
+        try {
+
+          await setDoc(
+            doc(db, "site", "contact"),
+            {
+              phone1: phone1,
+              phone2: phone2,
+              address: address
+            }
+          );
+
+          document.getElementById("siteStatus")
+            .textContent =
+            "✅ তথ্য সংরক্ষণ হয়েছে।";
+
+        } catch (error) {
+
+          console.error(error);
+
+          document.getElementById("siteStatus")
+            .textContent =
+            "❌ তথ্য সংরক্ষণ হয়নি।";
+        }
+
+      });
+
+
+    /* =========================
+       ADD MENU
+       ========================= */
+
+    document
+      .getElementById("addFoodBtn")
+      .addEventListener("click", async () => {
+
+        const name =
+          document.getElementById("foodName").value.trim();
+
+        const description =
+          document
+            .getElementById("foodDescription")
+            .value.trim();
+
+        const price =
+          Number(
+            document.getElementById("foodPrice").value
+          );
+
+        if (!name || !price) {
+
+          document.getElementById("menuStatus")
+            .textContent =
+            "খাবারের নাম ও দাম দিন।";
+
+          return;
+        }
+
+        try {
+
+          await addDoc(
+            collection(db, "menu"),
+            {
+              name: name,
+              description: description,
+              price: price
+            }
+          );
+
+          document.getElementById("foodName").value = "";
+          document.getElementById("foodDescription").value = "";
+          document.getElementById("foodPrice").value = "";
+
+          document.getElementById("menuStatus")
+            .textContent =
+            "✅ খাবার যোগ হয়েছে।";
+
+          loadMenu();
+
+        } catch (error) {
+
+          console.error(error);
+
+          document.getElementById("menuStatus")
+            .textContent =
+            "❌ খাবার যোগ হয়নি।";
+        }
+
+      });
+
+
+    /* =========================
+       LOAD MENU
+       ========================= */
+
+    async function loadMenu() {
+
+      const list =
+        document.getElementById("menuList");
+
+      list.innerHTML = "";
+
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(db, "menu")
+          );
+
+        snapshot.forEach((item) => {
+
+          const data = item.data();
+
+          const div =
+            document.createElement("div");
+
+          div.className = "item";
+
+          div.innerHTML = `
+            <h3>${data.name || ""}</h3>
+            <p>${data.description || ""}</p>
+            <strong>৳ ${data.price || 0}</strong>
+            <button data-id="${item.id}">
+              মুছে ফেলুন
+            </button>
+          `;
+
+          div
+            .querySelector("button")
+            .addEventListener("click", async () => {
+
+              await deleteDoc(
+                doc(db, "menu", item.id)
+              );
+
+              loadMenu();
+
+            });
+
+          list.appendChild(div);
+
+        });
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+
+    /* =========================
+       OFFER
+       ========================= */
+
+    async function loadOffer() {
+
+      try {
+
+        const ref =
+          doc(db, "site", "offers");
+
+        const snap =
+          await getDoc(ref);
+
+        if (snap.exists()) {
+
+          const data = snap.data();
+
+          document.getElementById("offerTitle").value =
+            data.title || "";
+
+          document.getElementById("offerText").value =
+            data.text || "";
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+
+    document
+      .getElementById("saveOfferBtn")
+      .addEventListener("click", async () => {
+
+        const title =
+          document.getElementById("offerTitle")
+            .value.trim();
+
+        const text =
+          document.getElementById("offerText")
+            .value.trim();
+
+        try {
+
+          await setDoc(
+            doc(db, "site", "offers"),
+            {
+              title: title,
+              text: text
+            }
+          );
+
+          document.getElementById("offerStatus")
+            .textContent =
+            "✅ অফার সংরক্ষণ হয়েছে।";
+
+        } catch (error) {
+
+          console.error(error);
+
+          document.getElementById("offerStatus")
+            .textContent =
+            "❌ অফার সংরক্ষণ হয়নি।";
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
