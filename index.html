@@ -1,326 +1,347 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="খাজা বিরানি হাউজ — স্বাদে ঐতিহ্য, মানে আস্থা।">
-  <title>খাজা বিরানি হাউজ | Khaja Biryani House</title>
+  <title>খাজা বিরানি হাউজ</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff8ed;
+      color: #333;
+    }
+
+    header {
+      background: #8b0000;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 15px;
+    }
+
+    nav {
+      background: #5c0000;
+      padding: 12px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 20px;
+      background: #ffe8c2;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      color: #8b0000;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .section {
+      padding: 45px 18px;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-head h2 {
+      color: #8b0000;
+      font-size: 28px;
+      margin: 8px 0;
+    }
+
+    .section-head p {
+      color: #666;
+    }
+
+    .cards {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 15px;
+      padding: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    .pic {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .food-card h3 {
+      color: #8b0000;
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .food-card p {
+      color: #666;
+      line-height: 1.6;
+      min-height: 50px;
+    }
+
+    .price-row {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .price-row strong {
+      color: #008000;
+      font-size: 20px;
+    }
+
+    .order-btn {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 9px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .order-btn:hover {
+      background: #5c0000;
+    }
+
+    .offer {
+      background: #fff0c9;
+      text-align: center;
+      padding: 30px 20px;
+      margin: 20px;
+      border-radius: 15px;
+    }
+
+    .offer h2 {
+      color: #8b0000;
+      margin-bottom: 10px;
+    }
+
+    .contact {
+      text-align: center;
+      background: #f4dfc2;
+      padding: 35px 20px;
+    }
+
+    .contact h2 {
+      color: #8b0000;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      background: #5c0000;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .hero h2 {
+        font-size: 26px;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 5px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container nav">
-
-      <a href="#home" class="brand">
-        <span class="brand-icon">🍛</span>
-        <div>
-          <strong>খাজা বিরানি হাউজ</strong>
-          <small>Khaja Biryani House</small>
-        </div>
-      </a>
-
-      <button class="menu-btn" id="menuBtn">☰</button>
-
-      <nav id="navMenu">
-        <a href="#home">হোম</a>
-        <a href="#menu">মেনু</a>
-        <a href="#offer">অফার</a>
-        <a href="#about">আমাদের সম্পর্কে</a>
-        <a href="#contact">যোগাযোগ</a>
-        <a href="#order" class="order-btn">🛒 অর্ডার করুন</a>
-      </nav>
-
-    </div>
+  <header>
+    <h1>🍛 খাজা বিরানি হাউজ</h1>
+    <p>স্বাদে ঐতিহ্য, মানে আস্থা</p>
   </header>
 
+  <nav>
+    <a href="#home">হোম</a>
+    <a href="#menu">মেনু</a>
+    <a href="#offer">অফার</a>
+    <a href="#contact">যোগাযোগ</a>
+  </nav>
 
-  <!-- Hero -->
   <section class="hero" id="home">
-    <div class="container hero-grid">
-
-      <div class="hero-content">
-        <span class="eyebrow">আসল স্বাদের দেশি বিরানি</span>
-
-        <h1>
-          খাজা <span>বিরানি</span> হাউজ
-        </h1>
-
-        <p>
-          খাঁটি মসলা, মানসম্মত উপকরণ আর যত্নে রান্না করা
-          সুস্বাদু বিরানি—আপনার প্রতিটি খাবার হোক আনন্দের।
-        </p>
-
-        <div class="hero-buttons">
-          <a href="#order" class="btn red">এখনই অর্ডার করুন</a>
-          <a href="#menu" class="btn outline">মেনু দেখুন</a>
-        </div>
-
-        <div class="trust">
-          <span>✓ তাজা উপকরণ</span>
-          <span>✓ যত্নে রান্না</span>
-          <span>✓ সাশ্রয়ী দাম</span>
-        </div>
-      </div>
-
-      <div class="hero-art">
-        <div class="food-circle">
-          <span>🍛</span>
-        </div>
-        <div class="food-card">
-          <span>🍗</span>
-          <strong>প্রতি প্লেটে</strong>
-          <b>সুস্বাদু বিরানি</b>
-        </div>
-      </div>
-
-    </div>
+    <h2>আসল স্বাদের দেশি বিরানি</h2>
+    <p>
+      খাঁটি মসলা, মানসম্মত উপকরণ আর যত্নে রান্না করা সুস্বাদু খাবার।
+      <br>
+      খাজা বিরানি হাউজে আপনাকে স্বাগতম।
+    </p>
   </section>
-
 
   <!-- Menu -->
   <section class="section" id="menu">
-    <div class="container">
 
-      <div class="section-head">
-        <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
-        <h2>আমাদের মেনু</h2>
-        <p>দামগুলো নমুনা—আপনার প্রকৃত দাম বসিয়ে নিন</p>
+    <div class="section-head">
+      <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
+      <h2>আমাদের মেনু</h2>
+      <p>সুস্বাদু খাবার ও নির্ধারিত মূল্য</p>
+    </div>
+
+    <div class="cards">
+
+      <div class="food-card">
+        <div class="pic">🍖</div>
+        <h3>মাটন কাচ্চি</h3>
+        <p>সুগন্ধি চাল ও মসলায় তৈরি সুস্বাদু মাটন কাচ্চি।</p>
+        <div class="price-row">
+          <strong>৳ 210</strong>
+          <button class="order-btn" onclick="orderFood('মাটন কাচ্চি')">অর্ডার</button>
+        </div>
       </div>
 
-      <div class="cards">
-
-        <div class="food-card">
-          <div class="pic">🍗</div>
-          <h3>চিকেন বিরানি</h3>
-          <p>মজাদার মসলা ও সুগন্ধি চালের বিরানি।</p>
-          <div class="price-row">
-            <strong>৳ ১৪০</strong>
-            <button onclick="pick('চিকেন বিরানি')">অর্ডার</button>
-          </div>
+      <div class="food-card">
+        <div class="pic">🍖</div>
+        <h3>বিফ কাচ্চি</h3>
+        <p>নরম গরুর মাংস ও মসলায় তৈরি সুস্বাদু বিফ কাচ্চি।</p>
+        <div class="price-row">
+          <strong>৳ 160</strong>
+          <button class="order-btn" onclick="orderFood('বিফ কাচ্চি')">অর্ডার</button>
         </div>
-
-        <div class="food-card">
-          <div class="pic">🍖</div>
-          <h3>মাটন বিরানি</h3>
-          <p>নরম মাংস ও সুগন্ধি চালের বিশেষ আয়োজন।</p>
-          <div class="price-row">
-            <strong>৳ ২৮০</strong>
-            <button onclick="pick('মাটন বিরানি')">অর্ডার</button>
-          </div>
-        </div>
-
-        <div class="food-card">
-          <div class="pic">🥘</div>
-          <h3>বিফ বিরানি</h3>
-          <p>সমৃদ্ধ স্বাদের মসলাদার বিরানি।</p>
-          <div class="price-row">
-            <strong>৳ ২২০</strong>
-            <button onclick="pick('বিফ বিরানি')">অর্ডার</button>
-          </div>
-        </div>
-
-        <div class="food-card">
-          <div class="pic">🥚</div>
-          <h3>ডিম বিরানি</h3>
-          <p>দেশি মসলায় তৈরি সুস্বাদু বিরানি।</p>
-          <div class="price-row">
-            <strong>৳ ১২০</strong>
-            <button onclick="pick('ডিম বিরানি')">অর্ডার</button>
-          </div>
-        </div>
-
-        <div class="food-card">
-          <div class="pic">🍗</div>
-          <h3>চিকেন রোস্ট</h3>
-          <p>মসলায় মাখানো সুস্বাদু রোস্ট।</p>
-          <div class="price-row">
-            <strong>৳ ১০০</strong>
-            <button onclick="pick('চিকেন রোস্ট')">অর্ডার</button>
-          </div>
-        </div>
-
-        <div class="food-card">
-          <div class="pic">🥤</div>
-          <h3>কোল্ড ড্রিংকস</h3>
-          <p>খাবারের সঙ্গে ঠান্ডা পানীয়।</p>
-          <div class="price-row">
-            <strong>৳ ৩০</strong>
-            <button onclick="pick('কোল্ড ড্রিংকস')">অর্ডার</button>
-          </div>
-        </div>
-
       </div>
+
+      <div class="food-card">
+        <div class="pic">🍛</div>
+        <h3>বিফ তেহারি</h3>
+        <p>সুস্বাদু মসলা ও গরুর মাংসে তৈরি বিফ তেহারি।</p>
+        <div class="price-row">
+          <strong>৳ 120</strong>
+          <button class="order-btn" onclick="orderFood('বিফ তেহারি')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🥘</div>
+        <h3>গরুর রেজালা</h3>
+        <p>মজাদার মসলা দিয়ে রান্না করা সুস্বাদু গরুর রেজালা।</p>
+        <div class="price-row">
+          <strong>৳ 160</strong>
+          <button class="order-btn" onclick="orderFood('গরুর রেজালা')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🍗</div>
+        <h3>চিকেন খিচুড়ি</h3>
+        <p>চিকেন ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
+        <div class="price-row">
+          <strong>৳ 90</strong>
+          <button class="order-btn" onclick="orderFood('চিকেন খিচুড়ি')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🥚</div>
+        <h3>ডিম খিচুড়ি</h3>
+        <p>ডিম ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
+        <div class="price-row">
+          <strong>৳ 80</strong>
+          <button class="order-btn" onclick="orderFood('ডিম খিচুড়ি')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🍳</div>
+        <h3>ডিম পোলাও</h3>
+        <p>সুগন্ধি চাল ও ডিম দিয়ে তৈরি মজাদার পোলাও।</p>
+        <div class="price-row">
+          <strong>৳ 70</strong>
+          <button class="order-btn" onclick="orderFood('ডিম পোলাও')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🥤</div>
+        <h3>বোরহানি</h3>
+        <p>বিরানির সঙ্গে উপভোগ করার জন্য সুস্বাদু বোরহানি।</p>
+        <div class="price-row">
+          <strong>৳ 80</strong>
+          <button class="order-btn" onclick="orderFood('বোরহানি')">অর্ডার</button>
+        </div>
+      </div>
+
+      <div class="food-card">
+        <div class="pic">🥤</div>
+        <h3>Mojo</h3>
+        <p>ঠান্ডা Mojo বোতল।</p>
+        <div class="price-row">
+          <strong>৳ 20</strong>
+          <button class="order-btn" onclick="orderFood('Mojo')">অর্ডার</button>
+        </div>
+      </div>
+
     </div>
   </section>
-
 
   <!-- Offer -->
-  <section class="section offer-section" id="offer">
-    <div class="container">
-
-      <div class="offer-box">
-
-        <div class="offer">
-          <span class="offer-label">আজকের বিশেষ অফার</span>
-          <h2>কম্বো প্যাকেজ 🎁</h2>
-          <p>চিকেন বিরানি + ডিম + কোল্ড ড্রিংকস</p>
-          <strong>মাত্র ৳ ১৫০</strong>
-          <br>
-          <a href="#order" class="btn red">অফারটি অর্ডার করুন</a>
-        </div>
-
-        <div class="offer-art">
-          🍛 ＋ 🥚 ＋ 🥤
-        </div>
-
-      </div>
-
-    </div>
+  <section class="offer" id="offer">
+    <h2>🎉 ওয়েবসাইট উদ্বোধন অফার</h2>
+    <p>ওয়েবসাইট উদ্বোধন উপলক্ষে সকল খাবারে 20% ডিসকাউন্ট।</p>
   </section>
-
-
-  <!-- About -->
-  <section class="section" id="about">
-    <div class="container about">
-
-      <div class="about-art">
-        👨‍🍳
-        <span>খাজা বিরানি হাউজ</span>
-      </div>
-
-      <div>
-        <span class="eyebrow">আমাদের সম্পর্কে</span>
-
-        <h2>স্বাদে ঐতিহ্য, মানে আস্থা</h2>
-
-        <p>
-          আমাদের লক্ষ্য হলো পরিষ্কার-পরিচ্ছন্ন পরিবেশে মানসম্মত
-          খাবার পরিবেশন করা। প্রতিটি প্লেটে স্বাদ ও গুণমান
-          বজায় রাখার চেষ্টা করি।
-        </p>
-
-        <div class="chips">
-          <span>🌿 তাজা উপকরণ</span>
-          <span>🛡️ মানসম্মত খাবার</span>
-          <span>❤️ গ্রাহকের সন্তুষ্টি</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- Order -->
-  <section class="section order-section" id="order">
-    <div class="container">
-
-      <div class="section-head">
-        <span>সহজে অর্ডার করুন</span>
-        <h2>আপনার অর্ডারের তথ্য দিন</h2>
-        <p>ফর্মটি পূরণ করে তথ্য যাচাই করুন।</p>
-      </div>
-
-      <div class="order-box">
-
-        <form id="orderForm">
-
-          <div class="form-group">
-            <label for="name">নাম</label>
-            <input type="text" id="name" name="name" placeholder="আপনার নাম" required>
-          </div>
-
-          <div class="form-group">
-            <label for="phone">মোবাইল</label>
-            <input type="tel" id="phone" name="phone" placeholder="01XXXXXXXXX" required>
-          </div>
-
-          <div class="form-group full">
-            <label for="food">খাবার</label>
-            <select id="food" name="food" required>
-              <option value="">খাবার নির্বাচন করুন</option>
-              <option value="চিকেন বিরানি">চিকেন বিরানি</option>
-              <option value="মাটন বিরানি">মাটন বিরানি</option>
-              <option value="বিফ বিরানি">বিফ বিরানি</option>
-              <option value="ডিম বিরানি">ডিম বিরানি</option>
-              <option value="চিকেন রোস্ট">চিকেন রোস্ট</option>
-              <option value="কোল্ড ড্রিংকস">কোল্ড ড্রিংকস</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="quantity">পরিমাণ</label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1" required>
-          </div>
-
-          <div class="form-group">
-            <label for="address">ঠিকানা</label>
-            <input type="text" id="address" name="address" placeholder="আপনার ঠিকানা" required>
-          </div>
-
-          <button type="submit" class="btn red full">
-            📩 অর্ডার পাঠান
-          </button>
-
-        </form>
-
-        <div id="orderMessage" class="order-message"></div>
-
-      </div>
-
-    </div>
-  </section>
-
 
   <!-- Contact -->
-  <section class="section contact-section" id="contact">
-    <div class="container">
-
-      <div class="section-head">
-        <span>যোগাযোগ</span>
-        <h2>আমাদের সঙ্গে যোগাযোগ করুন</h2>
-      </div>
-
-      <div class="contact">
-
-        <div class="contact-card">
-          <span>📞</span>
-          <h3>ফোন</h3>
-          <p>01XXXXXXXXX</p>
-        </div>
-
-        <div class="contact-card">
-          <span>📍</span>
-          <h3>ঠিকানা</h3>
-          <p>আপনার দোকানের ঠিকানা এখানে বসান</p>
-        </div>
-
-        <div class="contact-card">
-          <span>🕒</span>
-          <h3>সময়</h3>
-          <p>প্রতিদিন সকাল ১০টা – রাত ১০টা</p>
-        </div>
-
-      </div>
-
-    </div>
+  <section class="contact" id="contact">
+    <h2>যোগাযোগ</h2>
+    <p>📞 01785452580</p>
+    <p>📞 01608341418</p>
+    <p>📍 ঢাকা, বাংলাদেশ</p>
   </section>
 
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <h3>🍛 খাজা বিরানি হাউজ</h3>
-      <p>স্বাদে ঐতিহ্য, মানে আস্থা</p>
-      <p>© ২০২৬ খাজা বিরানি হাউজ। সর্বস্বত্ব সংরক্ষিত।</p>
-    </div>
+  <footer>
+    <p>© 2026 খাজা বিরানি হাউজ</p>
+    <p>স্বাদে ঐতিহ্য, মানে আস্থা ❤️</p>
   </footer>
 
-
-  <script src="js/script.js"></script>
+  <script>
+    function orderFood(foodName) {
+      alert(foodName + " অর্ডার করতে যোগাযোগ করুন।");
+    }
+  </script>
 
 </body>
 </html>
