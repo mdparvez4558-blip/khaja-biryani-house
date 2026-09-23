@@ -213,112 +213,137 @@
       খাজা বিরানি হাউজে আপনাকে স্বাগতম।
     </p>
   </section>
+<!-- Menu -->
+<section class="section" id="menu">
 
-  <!-- Menu -->
-  <section class="section" id="menu">
+  <div class="section-head">
+    <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
+    <h2>আমাদের মেনু</h2>
+    <p>সুস্বাদু খাবার ও নির্ধারিত মূল্য</p>
+  </div>
 
-    <div class="section-head">
-      <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
-      <h2>আমাদের মেনু</h2>
-      <p>সুস্বাদু খাবার ও নির্ধারিত মূল্য</p>
+  <div class="cards">
+
+    <!-- মাটন কাচ্চি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=85" alt="মাটন কাচ্চি">
+      </div>
+      <h3>মাটন কাচ্চি</h3>
+      <p>সুগন্ধি চাল ও মসলায় তৈরি সুস্বাদু মাটন কাচ্চি।</p>
+      <div class="price-row">
+        <strong>৳ 210</strong>
+        <button class="order-btn" onclick="orderFood('মাটন কাচ্চি')">অর্ডার</button>
+      </div>
     </div>
 
-    <div class="cards">
-
-      <div class="food-card">
-        <div class="pic">
-  <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80" alt="মাটন কাচ্চি">
-        </div>
-        <h3>মাটন কাচ্চি</h3>
-        <p>সুগন্ধি চাল ও মসলায় তৈরি সুস্বাদু মাটন কাচ্চি।</p>
-        <div class="price-row">
-          <strong>৳ 210</strong>
-          <button class="order-btn" onclick="orderFood('মাটন কাচ্চি')">অর্ডার</button>
-        </div>
+    <!-- বিফ কাচ্চি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=85" alt="বিফ কাচ্চি">
       </div>
-
-      <div class="food-card">
-        <div class="pic">🍖</div>
-        <h3>বিফ কাচ্চি</h3>
-        <p>নরম গরুর মাংস ও মসলায় তৈরি সুস্বাদু বিফ কাচ্চি।</p>
-        <div class="price-row">
-          <strong>৳ 160</strong>
-          <button class="order-btn" onclick="orderFood('বিফ কাচ্চি')">অর্ডার</button>
-        </div>
+      <h3>বিফ কাচ্চি</h3>
+      <p>নরম গরুর মাংস ও মসলায় তৈরি সুস্বাদু বিফ কাচ্চি।</p>
+      <div class="price-row">
+        <strong>৳ 160</strong>
+        <button class="order-btn" onclick="orderFood('বিফ কাচ্চি')">অর্ডার</button>
       </div>
-
-      <div class="food-card">
-        <div class="pic">🍛</div>
-        <h3>বিফ তেহারি</h3>
-        <p>সুস্বাদু মসলা ও গরুর মাংসে তৈরি বিফ তেহারি।</p>
-        <div class="price-row">
-          <strong>৳ 120</strong>
-          <button class="order-btn" onclick="orderFood('বিফ তেহারি')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🥘</div>
-        <h3>গরুর রেজালা</h3>
-        <p>মজাদার মসলা দিয়ে রান্না করা সুস্বাদু গরুর রেজালা।</p>
-        <div class="price-row">
-          <strong>৳ 160</strong>
-          <button class="order-btn" onclick="orderFood('গরুর রেজালা')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🍗</div>
-        <h3>চিকেন খিচুড়ি</h3>
-        <p>চিকেন ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
-        <div class="price-row">
-          <strong>৳ 90</strong>
-          <button class="order-btn" onclick="orderFood('চিকেন খিচুড়ি')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🥚</div>
-        <h3>ডিম খিচুড়ি</h3>
-        <p>ডিম ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
-        <div class="price-row">
-          <strong>৳ 80</strong>
-          <button class="order-btn" onclick="orderFood('ডিম খিচুড়ি')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🍳</div>
-        <h3>ডিম পোলাও</h3>
-        <p>সুগন্ধি চাল ও ডিম দিয়ে তৈরি মজাদার পোলাও।</p>
-        <div class="price-row">
-          <strong>৳ 70</strong>
-          <button class="order-btn" onclick="orderFood('ডিম পোলাও')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🥤</div>
-        <h3>বোরহানি</h3>
-        <p>বিরানির সঙ্গে উপভোগ করার জন্য সুস্বাদু বোরহানি।</p>
-        <div class="price-row">
-          <strong>৳ 80</strong>
-          <button class="order-btn" onclick="orderFood('বোরহানি')">অর্ডার</button>
-        </div>
-      </div>
-
-      <div class="food-card">
-        <div class="pic">🥤</div>
-        <h3>Mojo</h3>
-        <p>ঠান্ডা Mojo বোতল।</p>
-        <div class="price-row">
-          <strong>৳ 20</strong>
-          <button class="order-btn" onclick="orderFood('Mojo')">অর্ডার</button>
-        </div>
-      </div>
-
     </div>
-  </section>
+
+    <!-- বিফ তেহারি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="বিফ তেহারি">
+      </div>
+      <h3>বিফ তেহারি</h3>
+      <p>সুস্বাদু মসলা ও গরুর মাংসে তৈরি বিফ তেহারি।</p>
+      <div class="price-row">
+        <strong>৳ 120</strong>
+        <button class="order-btn" onclick="orderFood('বিফ তেহারি')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- গরুর রেজালা -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=85" alt="গরুর রেজালা">
+      </div>
+      <h3>গরুর রেজালা</h3>
+      <p>মজাদার মসলা দিয়ে রান্না করা সুস্বাদু গরুর রেজালা।</p>
+      <div class="price-row">
+        <strong>৳ 160</strong>
+        <button class="order-btn" onclick="orderFood('গরুর রেজালা')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- চিকেন খিচুড়ি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="চিকেন খিচুড়ি">
+      </div>
+      <h3>চিকেন খিচুড়ি</h3>
+      <p>চিকেন ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
+      <div class="price-row">
+        <strong>৳ 90</strong>
+        <button class="order-btn" onclick="orderFood('চিকেন খিচুড়ি')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- ডিম খিচুড়ি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="ডিম খিচুড়ি">
+      </div>
+      <h3>ডিম খিচুড়ি</h3>
+      <p>ডিম ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
+      <div class="price-row">
+        <strong>৳ 80</strong>
+        <button class="order-btn" onclick="orderFood('ডিম খিচুড়ি')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- ডিম পোলাও -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=85" alt="ডিম পোলাও">
+      </div>
+      <h3>ডিম পোলাও</h3>
+      <p>সুগন্ধি চাল ও ডিম দিয়ে তৈরি মজাদার পোলাও।</p>
+      <div class="price-row">
+        <strong>৳ 70</strong>
+        <button class="order-btn" onclick="orderFood('ডিম পোলাও')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- বোরহানি -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=85" alt="বোরহানি">
+      </div>
+      <h3>বোরহানি</h3>
+      <p>বিরানির সঙ্গে উপভোগ করার জন্য সুস্বাদু বোরহানি।</p>
+      <div class="price-row">
+        <strong>৳ 80</strong>
+        <button class="order-btn" onclick="orderFood('বোরহানি')">অর্ডার</button>
+      </div>
+    </div>
+
+    <!-- Mojo -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="https://images.unsplash.com/photo-1629203849820-fdd70d49c38e?auto=format&fit=crop&w=800&q=85" alt="Mojo">
+      </div>
+      <h3>Mojo</h3>
+      <p>ঠান্ডা Mojo বোতল।</p>
+      <div class="price-row">
+        <strong>৳ 20</strong>
+        <button class="order-btn" onclick="orderFood('Mojo')">অর্ডার</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+  <!-
 
   <!-- Offer -->
   <section class="offer" id="offer">
