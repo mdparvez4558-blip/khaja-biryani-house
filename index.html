@@ -1,389 +1,873 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>খাজা বিরানি হাউজ</title>
-.food-image {
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 8px solid #f1e2c6;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.18);
-  background: white;
-}
 
-.food-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+  <link rel="stylesheet" href="css/style.css">
+
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff8ed;
-      color: #333;
-    }
-
-    header {
-      background: #8b0000;
-      color: white;
-      padding: 18px;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-
-    header p {
-      font-size: 15px;
-    }
-
-    nav {
-      background: #5c0000;
-      padding: 12px;
-      text-align: center;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 10px;
-      font-weight: bold;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 55px 20px;
-      background: #ffe8c2;
-    }
-
-    .hero h2 {
-      font-size: 32px;
-      color: #8b0000;
-      margin-bottom: 12px;
-    }
-
-    .hero p {
-      font-size: 17px;
-      line-height: 1.7;
-    }
-
-    .section {
-      padding: 45px 18px;
-    }
-
-    .section-head {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .section-head h2 {
-      color: #8b0000;
-      font-size: 28px;
-      margin: 8px 0;
-    }
-
-    .section-head p {
-      color: #666;
-    }
-
-    .cards {
-      max-width: 1100px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-    }
-
-    .food-card {
-      background: white;
-      border-radius: 15px;
-      padding: 22px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      text-align: center;
-    }
-
-    .pic {
-      font-size: 45px;
-      margin-bottom: 10px;
-    }
-
-    .food-card h3 {
-      color: #8b0000;
-      font-size: 21px;
-      margin-bottom: 10px;
-    }
-
-    .food-card p {
-      color: #666;
-      line-height: 1.6;
-      min-height: 50px;
-    }
-
-    .price-row {
-      margin-top: 18px;
+    .topbar {
       display: flex;
+      align-items: center;
       justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    .site-logo {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f1e2c6;
+    }
+
+    .brand-area {
+      display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .price-row strong {
-      color: #008000;
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .food-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,.12);
+    }
+
+    .food-image {
+      width: 180px;
+      height: 180px;
+      margin: auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 8px solid #f1e2c6;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      background: white;
+    }
+
+    .food-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .price {
       font-size: 20px;
+      font-weight: bold;
+      margin: 8px 0;
     }
 
     .order-btn {
-      background: #8b0000;
-      color: white;
       border: none;
-      padding: 9px 15px;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
     }
 
-    .order-btn:hover {
-      background: #5c0000;
-    }
-
-    .offer {
-      background: #fff0c9;
-      text-align: center;
-      padding: 30px 20px;
-      margin: 20px;
-      border-radius: 15px;
-    }
-
-    .offer h2 {
-      color: #8b0000;
-      margin-bottom: 10px;
-    }
-
-    .contact {
-      text-align: center;
-      background: #f4dfc2;
-      padding: 35px 20px;
-    }
-
-    .contact h2 {
-      color: #8b0000;
-      margin-bottom: 15px;
-    }
-
-    footer {
-      background: #5c0000;
-      color: white;
-      text-align: center;
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 9999;
+      overflow-y: auto;
       padding: 20px;
     }
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 24px;
-      }
+    .modal-box {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+    }
 
-      .hero h2 {
-        font-size: 26px;
-      }
+    .modal-box input,
+    .modal-box textarea,
+    .modal-box select {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0 12px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
 
-      nav a {
-        display: inline-block;
-        margin: 5px;
-      }
+    .close-btn {
+      float: right;
+      border: none;
+      background: #eee;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .three-dot {
+      font-size: 25px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .admin-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .admin-tabs button {
+      padding: 9px 12px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .admin-section {
+      display: none;
+    }
+
+    .admin-section.active {
+      display: block;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>🍛 খাজা বিরানি হাউজ</h1>
-    <p>স্বাদে ঐতিহ্য, মানে আস্থা</p>
+  <!-- HEADER -->
+  <header class="topbar">
+
+    <div class="brand-area">
+      <img src="images/logo.jpg" class="site-logo" alt="খাজা বিরানি হাউজ">
+      <div>
+        <h2>🍛 খাজা বিরানি হাউজ</h2>
+        <small>স্বাদে ঐতিহ্য, মানে আস্থা</small>
+      </div>
+    </div>
+
+    <button class="three-dot" onclick="toggleMenu()">⋮</button>
+
   </header>
 
+  <!-- THREE DOT MENU -->
+  <div id="threeMenu" style="display:none; position:absolute; right:15px; top:75px; background:white; padding:15px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,.2); z-index:999;">
+    <button onclick="openProfile()">👤 প্রোফাইল</button><br><br>
+    <button onclick="openOrders()">📦 আমার অর্ডার</button><br><br>
+    <button onclick="openSettings()">⚙️ সেটিংস</button><br><br>
+    <button onclick="openAdmin('orders')">🛠️ অ্যাডমিন প্যানেল</button>
+  </div>
+
+
+  <!-- NAVIGATION -->
   <nav>
     <a href="#home">হোম</a>
     <a href="#menu">মেনু</a>
     <a href="#offer">অফার</a>
+    <a href="#about">আমাদের সম্পর্কে</a>
     <a href="#contact">যোগাযোগ</a>
+
+    <button onclick="openOrder()">🛒 অর্ডার করুন</button>
   </nav>
 
-  <section class="hero" id="home">
-    <h2>আসল স্বাদের দেশি বিরানি</h2>
-    <p>
-      খাঁটি মসলা, মানসম্মত উপকরণ আর যত্নে রান্না করা সুস্বাদু খাবার।
-      <br>
-      খাজা বিরানি হাউজে আপনাকে স্বাগতম।
-    </p>
-  </section>
-<!-- Menu -->
-<section class="section" id="menu">
 
-  <div class="section-head">
-    <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
-    <h2>আমাদের মেনু</h2>
-    <p>সুস্বাদু খাবার ও নির্ধারিত মূল্য</p>
+  <!-- HOME -->
+  <section id="home" class="hero section">
+
+    <div class="container">
+
+      <h1>আসল স্বাদের দেশি বিরানি</h1>
+
+      <p>
+        খাঁটি মসলা, মানসম্মত উপকরণ আর যত্নে রান্না করা
+        সুস্বাদু খাবার।
+      </p>
+
+      <ul>
+        <li>✅ তাজা উপকরণ</li>
+        <li>✅ যত্নে রান্না</li>
+        <li>✅ সাশ্রয়ী দাম</li>
+      </ul>
+
+      <button onclick="openOrder()">
+        🛒 এখনই অর্ডার করুন
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- MENU -->
+  <section id="menu" class="section">
+
+    <div class="container">
+
+      <span>খাঁটি স্বাদ, খাঁটি খাবার</span>
+
+      <h2>আমাদের মেনু</h2>
+
+      <p>সুস্বাদু খাবার ও নির্ধারিত মূল্য</p>
+
+      <div id="foodList" class="menu-grid">
+
+        <!-- মাটন কাচ্চি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/mutton-kacchi.jpg" alt="মাটন কাচ্চি">
+          </div>
+
+          <h3>মাটন কাচ্চি</h3>
+
+          <div class="price">৳ 210</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('মাটন কাচ্চি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- বিফ কাচ্চি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/beef-kacchi.jpg" alt="বিফ কাচ্চি">
+          </div>
+
+          <h3>বিফ কাচ্চি</h3>
+
+          <div class="price">৳ 160</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('বিফ কাচ্চি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- বিফ তেহারি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="বিফ তেহারি">
+          </div>
+
+          <h3>বিফ তেহারি</h3>
+
+          <div class="price">৳ 120</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('বিফ তেহারি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- গরুর রেজালা -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="গরুর রেজালা">
+          </div>
+
+          <h3>গরুর রেজালা</h3>
+
+          <div class="price">৳ 160</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('গরুর রেজালা')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- চিকেন খিচুড়ি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="চিকেন খিচুড়ি">
+          </div>
+
+          <h3>চিকেন খিচুড়ি</h3>
+
+          <div class="price">৳ 90</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('চিকেন খিচুড়ি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- ডিম খিচুড়ি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="ডিম খিচুড়ি">
+          </div>
+
+          <h3>ডিম খিচুড়ি</h3>
+
+          <div class="price">৳ 80</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('ডিম খিচুড়ি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- ডিম পোলাও -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="ডিম পোলাও">
+          </div>
+
+          <h3>ডিম পোলাও</h3>
+
+          <div class="price">৳ 70</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('ডিম পোলাও')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- বোরহানি -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="বোরহানি">
+          </div>
+
+          <h3>বোরহানি</h3>
+
+          <div class="price">৳ 80</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('বোরহানি')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+
+        <!-- Mojo -->
+        <div class="food-card">
+
+          <div class="food-image">
+            <img src="images/chicken-biryani.jpg" alt="Mojo">
+          </div>
+
+          <h3>Mojo</h3>
+
+          <div class="price">৳ 20</div>
+
+          <button
+            class="order-btn"
+            onclick="orderFood('Mojo')">
+            🛒 অর্ডার করুন
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- OFFER -->
+  <section id="offer" class="section">
+
+    <div class="container">
+
+      <h2>🎉 বিশেষ অফার</h2>
+
+      <p>
+        ওয়েবসাইট উদ্বোধন উপলক্ষে সকল খাবারে
+        <strong>20% ডিসকাউন্ট</strong>।
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+
+    <div class="container">
+
+      <h2>আমাদের সম্পর্কে</h2>
+
+      <p>
+        খাজা বিরানি হাউজে আমরা মানসম্মত উপকরণ,
+        খাঁটি মসলা এবং যত্নের সাথে সুস্বাদু খাবার
+        পরিবেশন করার চেষ্টা করি।
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+
+    <div class="container">
+
+      <h2>যোগাযোগ</h2>
+
+      <p>📞 01785452580</p>
+      <p>📞 01608341418</p>
+      <p>📍 ঢাকা, বাংলাদেশ</p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ORDER MODAL -->
+  <div id="orderModal" class="modal">
+
+    <div class="modal-box">
+
+      <button class="close-btn" onclick="closeModal('orderModal')">
+        ✕
+      </button>
+
+      <h2>🛒 অর্ডার করুন</h2>
+
+      <form id="orderForm">
+
+        <label>আপনার নাম</label>
+        <input
+          type="text"
+          id="customerName"
+          required
+          placeholder="আপনার নাম লিখুন">
+
+        <label>মোবাইল নম্বর</label>
+        <input
+          type="tel"
+          id="customerPhone"
+          required
+          placeholder="017XXXXXXXX">
+
+        <label>সম্পূর্ণ ঠিকানা</label>
+        <textarea
+          id="customerAddress"
+          required
+          placeholder="আপনার সম্পূর্ণ ঠিকানা"></textarea>
+
+        <label>খাবার নির্বাচন</label>
+
+        <select id="foodSelect" required>
+
+          <option value="">খাবার নির্বাচন করুন</option>
+
+          <option value="মাটন কাচ্চি">মাটন কাচ্চি - ৳210</option>
+          <option value="বিফ কাচ্চি">বিফ কাচ্চি - ৳160</option>
+          <option value="বিফ তেহারি">বিফ তেহারি - ৳120</option>
+          <option value="গরুর রেজালা">গরুর রেজালা - ৳160</option>
+          <option value="চিকেন খিচুড়ি">চিকেন খিচুড়ি - ৳90</option>
+          <option value="ডিম খিচুড়ি">ডিম খিচুড়ি - ৳80</option>
+          <option value="ডিম পোলাও">ডিম পোলাও - ৳70</option>
+          <option value="বোরহানি">বোরহানি - ৳80</option>
+          <option value="Mojo">Mojo - ৳20</option>
+
+        </select>
+
+
+        <label>পরিমাণ</label>
+
+        <input
+          type="number"
+          id="foodQuantity"
+          value="1"
+          min="1"
+          required>
+
+
+        <label>অতিরিক্ত নোট</label>
+
+        <textarea
+          id="orderNote"
+          placeholder="কোনো অতিরিক্ত কথা থাকলে লিখুন"></textarea>
+
+
+        <button type="submit">
+          ✅ অর্ডার নিশ্চিত করুন
+        </button>
+
+      </form>
+
+    </div>
+
   </div>
 
-  <div class="cards">
 
-    <!-- মাটন কাচ্চি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="mutton-kacchi.jpg?v=2" alt="মাটন কাচ্চি">
-      <h3>মাটন কাচ্চি</h3>
-      <p>সুগন্ধি চাল ও মসলায় তৈরি সুস্বাদু মাটন কাচ্চি।</p>
-      <div class="price-row">
-        <strong>৳ 210</strong>
-        <button class="order-btn" onclick="orderFood('মাটন কাচ্চি')">অর্ডার</button>
-      </div>
-    </div>
+  <!-- PROFILE MODAL -->
+  <div id="profileModal" class="modal">
 
-    <!-- বিফ কাচ্চি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=85" alt="বিফ কাচ্চি">
-      </div>
-      <h3>বিফ কাচ্চি</h3>
-      <p>নরম গরুর মাংস ও মসলায় তৈরি সুস্বাদু বিফ কাচ্চি।</p>
-      <div class="price-row">
-        <strong>৳ 160</strong>
-        <button class="order-btn" onclick="orderFood('বিফ কাচ্চি')">অর্ডার</button>
-      </div>
-    </div>
+    <div class="modal-box">
 
-    <!-- বিফ তেহারি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="বিফ তেহারি">
-      </div>
-      <h3>বিফ তেহারি</h3>
-      <p>সুস্বাদু মসলা ও গরুর মাংসে তৈরি বিফ তেহারি।</p>
-      <div class="price-row">
-        <strong>৳ 120</strong>
-        <button class="order-btn" onclick="orderFood('বিফ তেহারি')">অর্ডার</button>
-      </div>
-    </div>
+      <button class="close-btn" onclick="closeModal('profileModal')">
+        ✕
+      </button>
 
-    <!-- গরুর রেজালা -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=85" alt="গরুর রেজালা">
-      </div>
-      <h3>গরুর রেজালা</h3>
-      <p>মজাদার মসলা দিয়ে রান্না করা সুস্বাদু গরুর রেজালা।</p>
-      <div class="price-row">
-        <strong>৳ 160</strong>
-        <button class="order-btn" onclick="orderFood('গরুর রেজালা')">অর্ডার</button>
-      </div>
-    </div>
+      <h2>👤 প্রোফাইল</h2>
 
-    <!-- চিকেন খিচুড়ি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="চিকেন খিচুড়ি">
+      <div id="profileContent">
+        লগইন করলে আপনার প্রোফাইল এখানে দেখা যাবে।
       </div>
-      <h3>চিকেন খিচুড়ি</h3>
-      <p>চিকেন ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
-      <div class="price-row">
-        <strong>৳ 90</strong>
-        <button class="order-btn" onclick="orderFood('চিকেন খিচুড়ি')">অর্ডার</button>
-      </div>
-    </div>
 
-    <!-- ডিম খিচুড়ি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85" alt="ডিম খিচুড়ি">
-      </div>
-      <h3>ডিম খিচুড়ি</h3>
-      <p>ডিম ও মসলা দিয়ে তৈরি সুস্বাদু খিচুড়ি।</p>
-      <div class="price-row">
-        <strong>৳ 80</strong>
-        <button class="order-btn" onclick="orderFood('ডিম খিচুড়ি')">অর্ডার</button>
-      </div>
-    </div>
-
-    <!-- ডিম পোলাও -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=85" alt="ডিম পোলাও">
-      </div>
-      <h3>ডিম পোলাও</h3>
-      <p>সুগন্ধি চাল ও ডিম দিয়ে তৈরি মজাদার পোলাও।</p>
-      <div class="price-row">
-        <strong>৳ 70</strong>
-        <button class="order-btn" onclick="orderFood('ডিম পোলাও')">অর্ডার</button>
-      </div>
-    </div>
-
-    <!-- বোরহানি -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=85" alt="বোরহানি">
-      </div>
-      <h3>বোরহানি</h3>
-      <p>বিরানির সঙ্গে উপভোগ করার জন্য সুস্বাদু বোরহানি।</p>
-      <div class="price-row">
-        <strong>৳ 80</strong>
-        <button class="order-btn" onclick="orderFood('বোরহানি')">অর্ডার</button>
-      </div>
-    </div>
-
-    <!-- Mojo -->
-    <div class="food-card">
-      <div class="food-image">
-        <img src="https://images.unsplash.com/photo-1629203849820-fdd70d49c38e?auto=format&fit=crop&w=800&q=85" alt="Mojo">
-      </div>
-      <h3>Mojo</h3>
-      <p>ঠান্ডা Mojo বোতল।</p>
-      <div class="price-row">
-        <strong>৳ 20</strong>
-        <button class="order-btn" onclick="orderFood('Mojo')">অর্ডার</button>
-      </div>
     </div>
 
   </div>
-</section>
-  <!-
 
-  <!-- Offer -->
-  <section class="offer" id="offer">
-    <h2>🎉 ওয়েবসাইট উদ্বোধন অফার</h2>
-    <p>ওয়েবসাইট উদ্বোধন উপলক্ষে সকল খাবারে 20% ডিসকাউন্ট।</p>
-  </section>
 
-  <!-- Contact -->
-  <section class="contact" id="contact">
-    <h2>যোগাযোগ</h2>
-    <p>📞 01785452580</p>
-    <p>📞 01608341418</p>
-    <p>📍 ঢাকা, বাংলাদেশ</p>
-  </section>
+  <!-- ORDERS MODAL -->
+  <div id="ordersModal" class="modal">
 
-  <footer>
-    <p>© 2026 খাজা বিরানি হাউজ</p>
-    <p>স্বাদে ঐতিহ্য, মানে আস্থা ❤️</p>
-  </footer>
+    <div class="modal-box">
 
+      <button class="close-btn" onclick="closeModal('ordersModal')">
+        ✕
+      </button>
+
+      <h2>📦 আমার অর্ডার</h2>
+
+      <div id="ordersContent">
+        আপনার অর্ডারগুলো এখানে দেখা যাবে।
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal">
+
+    <div class="modal-box">
+
+      <button class="close-btn" onclick="closeModal('settingsModal')">
+        ✕
+      </button>
+
+      <h2>⚙️ সেটিংস</h2>
+
+      <p>
+        খাবারের নাম, দাম, ছবি, অফার এবং যোগাযোগের
+        তথ্য অ্যাডমিন প্যানেল থেকে পরিবর্তন করা যাবে।
+      </p>
+
+      <button onclick="openAdmin('menu')">
+        🍛 মেনু ম্যানেজমেন্ট
+      </button>
+
+      <button onclick="openAdmin('images')">
+        🖼️ ছবি পরিবর্তন
+      </button>
+
+      <button onclick="openAdmin('contact')">
+        📞 যোগাযোগ সেটিংস
+      </button>
+
+      <button onclick="openAdmin('offer')">
+        🎁 অফার সেটিংস
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN MODAL -->
+  <div id="adminModal" class="modal">
+
+    <div class="modal-box">
+
+      <button class="close-btn" onclick="closeModal('adminModal')">
+        ✕
+      </button>
+
+      <h2>🛠️ অ্যাডমিন প্যানেল</h2>
+
+      <div class="admin-tabs">
+
+        <button data-admin-section="orders">
+          📦 অর্ডার
+        </button>
+
+        <button data-admin-section="menu">
+          🍛 মেনু
+        </button>
+
+        <button data-admin-section="images">
+          🖼️ ছবি
+        </button>
+
+        <button data-admin-section="contact">
+          📞 যোগাযোগ
+        </button>
+
+        <button data-admin-section="offer">
+          🎁 অফার
+        </button>
+
+        <button data-admin-section="admins">
+          👥 অ্যাডমিন
+        </button>
+
+      </div>
+
+
+      <div id="adminOrders" class="admin-section">
+
+        <h3>📦 অর্ডার ম্যানেজমেন্ট</h3>
+
+        <div id="adminOrdersContent">
+          অর্ডার লোড হচ্ছে...
+        </div>
+
+      </div>
+
+
+      <div id="adminMenu" class="admin-section">
+
+        <h3>🍛 মেনু ম্যানেজমেন্ট</h3>
+
+        <div id="adminMenuContent">
+          মেনু লোড হচ্ছে...
+        </div>
+
+      </div>
+
+
+      <div id="adminImages" class="admin-section">
+
+        <h3>🖼️ Logo ও Food Images</h3>
+
+        <input type="file" id="logoUpload" accept="image/*">
+
+        <button onclick="uploadLogo()">
+          Logo আপলোড
+        </button>
+
+        <br><br>
+
+        <input type="file" id="foodImageUpload" accept="image/*">
+
+        <button onclick="uploadFoodImage()">
+          Food Image আপলোড
+        </button>
+
+      </div>
+
+
+      <div id="adminContact" class="admin-section">
+
+        <h3>📞 Contact Settings</h3>
+
+        <input
+          type="text"
+          id="adminPhone1"
+          placeholder="প্রথম ফোন নম্বর">
+
+        <input
+          type="text"
+          id="adminPhone2"
+          placeholder="দ্বিতীয় ফোন নম্বর">
+
+        <input
+          type="text"
+          id="adminAddress"
+          placeholder="ঠিকানা">
+
+        <button onclick="saveContactSettings()">
+          💾 সংরক্ষণ
+        </button>
+
+      </div>
+
+
+      <div id="adminOffer" class="admin-section">
+
+        <h3>🎁 Offer Settings</h3>
+
+        <textarea
+          id="adminOfferText"
+          placeholder="অফারের লেখা"></textarea>
+
+        <textarea
+          id="adminAboutText"
+          placeholder="আমাদের সম্পর্কে"></textarea>
+
+        <button onclick="saveOfferSettings()">
+          💾 সংরক্ষণ
+        </button>
+
+      </div>
+
+
+      <div id="adminAdmins" class="admin-section">
+
+        <h3>👥 Admin Management</h3>
+
+        <input
+          type="email"
+          id="newAdminEmail"
+          placeholder="নতুন Admin-এর Gmail">
+
+        <button onclick="addAdmin()">
+          ➕ Admin যোগ করুন
+        </button>
+
+        <div id="adminList"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- JAVASCRIPT -->
   <script>
-    function orderFood(foodName) {
-      alert(foodName + " অর্ডার করতে যোগাযোগ করুন।");
+
+    function toggleMenu() {
+
+      const menu = document.getElementById("threeMenu");
+
+      menu.style.display =
+        menu.style.display === "none"
+          ? "block"
+          : "none";
     }
+
+
+    function openOrder(food = "") {
+
+      document.getElementById("orderModal").style.display = "block";
+
+      if (food) {
+        document.getElementById("foodSelect").value = food;
+      }
+    }
+
+
+    function orderFood(food) {
+      openOrder(food);
+    }
+
+
+    function openProfile() {
+
+      document.getElementById("profileModal").style.display = "block";
+    }
+
+
+    function openOrders() {
+
+      document.getElementById("ordersModal").style.display = "block";
+    }
+
+
+    function openSettings() {
+
+      document.getElementById("settingsModal").style.display = "block";
+    }
+
+
+    function closeModal(id) {
+
+      document.getElementById(id).style.display = "none";
+    }
+
+
+    function openAdmin(section = "orders") {
+
+      document.getElementById("adminModal").style.display = "block";
+
+      if (typeof window.showAdminSection === "function") {
+        window.showAdminSection(section);
+      }
+
+      setTimeout(function () {
+
+        const buttons =
+          document.querySelectorAll("[data-admin-section]");
+
+        buttons.forEach(function(button) {
+
+          button.onclick = function() {
+
+            const selected =
+              button.getAttribute("data-admin-section");
+
+            if (typeof window.showAdminSection === "function") {
+              window.showAdminSection(selected);
+            }
+
+          };
+
+        });
+
+      }, 100);
+    }
+
+
+    window.addEventListener("click", function(event) {
+
+      document.querySelectorAll(".modal").forEach(function(modal) {
+
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+
+      });
+
+    });
+
   </script>
+
+
+  <!-- FIREBASE APP -->
+  <script type="module" src="js/app.js"></script>
 
 </body>
 </html>
