@@ -50,6 +50,10 @@ const functions = getFunctions(app);
 
 const provider = new GoogleAuthProvider();
 
+provider.setCustomParameters({
+  prompt: "select_account"
+});
+
 let user = null;
 let isAdmin = false;
 let foods = [];
