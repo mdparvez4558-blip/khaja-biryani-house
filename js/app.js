@@ -489,6 +489,7 @@ function settingAction(type) {
 }
 
 
+
 /* ADMIN PANEL */
 
 async function openAdmin(section = "orders") {
@@ -509,16 +510,46 @@ async function openAdmin(section = "orders") {
 
   $("adminPanel").innerHTML = `
     <div class="admin-grid">
-      <div class="stat">🛒 অর্ডার</div>
-      <div class="stat">🍛 মেনু</div>
-      <div class="stat">🖼️ ছবি</div>
-      <div class="stat">⚙️ Settings</div>
+
+      <button class="stat" data-admin-section="orders">
+        🛒 অর্ডার
+      </button>
+
+      <button class="stat" data-admin-section="menu">
+        🍛 মেনু
+      </button>
+
+      <button class="stat" data-admin-section="images">
+        🖼️ ছবি
+      </button>
+
+      <button class="stat" data-admin-section="settings">
+        ⚙️ Settings
+      </button>
+
     </div>
 
     <div id="adminContent" class="admin-section">
       লোড হচ্ছে...
     </div>
   `;
+
+  $("adminPanel")
+    .querySelectorAll("[data-admin-section]")
+    .forEach(button => {
+
+      button.onclick = async () => {
+        const action = button.dataset.adminSection;
+
+        if (action === "settings") {
+          openSettings();
+          return;
+        }
+
+        await renderAdminSection(action);
+      };
+
+    });
 
   await renderAdminSection(section);
 }
