@@ -539,19 +539,25 @@ async function openAdmin(section = "orders") {
     .forEach(button => {
 
       button.onclick = async () => {
-        const action = button.dataset.adminSection;
+  const action = button.dataset.adminSection;
 
-        if (action === "settings") {
-          openSettings();
-          return;
-        }
+  alert("বাটন কাজ করছে: " + action);
 
-        await renderAdminSection(action);
-      };
+  if (action === "settings") {
+    openSettings();
+    return;
+  }
 
-    });
+  try {
+    await renderAdminSection(action);
+  } catch (error) {
+    alert("সমস্যা হয়েছে: " + error.message);
+  }
+};
 
-  await renderAdminSection(section);
+});
+
+await renderAdminSection(section);
 }
 
 
