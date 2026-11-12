@@ -650,17 +650,20 @@ async function renderAdminSection(section) {
       </button>
 
       <hr>
+${foods.map(food => `
+  <div class="order-row">
+    <b>${escapeHtml(food.name)}</b>
+    — ৳ ${Number(food.price || 0)}
 
-      ${foods.map(food => `
-        <div class="order-row">
-          <b>${escapeHtml(food.name)}</b>
-          — ৳ ${Number(food.price || 0)}
+    <button class="primary" data-edit="${escapeHtml(food.id)}">
+      ✏️ সম্পাদনা
+    </button>
 
-          <button class="danger" data-del="${escapeHtml(food.id)}">
-            তালিকা থেকে সরান
-          </button>
-        </div>
-      `).join("")}
+    <button class="danger" data-del="${escapeHtml(food.id)}">
+      তালিকা থেকে সরান
+    </button>
+  </div>
+`).join("")}
     `;
 
     $("mSave").onclick = saveFood;
