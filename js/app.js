@@ -52,7 +52,7 @@ provider.setCustomParameters({ prompt: "select_account" });
 let user = null;
 let isAdmin = false;
 let foods = [];
-
+let editingFoodId = null;
 const $ = id => document.getElementById(id);
 
 const show = id => $(id)?.classList.add("show");
