@@ -687,6 +687,56 @@ ${foods.map(food => `
       };
     });
 
+    /* পুরনো খাবার সম্পাদনা */
+
+    content.querySelectorAll("[data-edit]").forEach(button => {
+      button.onclick = async () => {
+        const food = foods.find(
+          item => item.id === button.dataset.edit
+        );
+
+        if (!food) return;
+
+        const name = prompt("খাবারের নতুন নাম লিখুন:", food.name);
+        if (name === null) return;
+
+        const priceText = prompt("নতুন দাম লিখুন:", food.price);
+        if (priceText === null) return;
+
+        const description = prompt(
+          "নতুন বিবরণ লিখুন:",
+          food.description || ""
+        );
+        if (description === null) return;
+
+        const price = Number(priceText);
+
+        if (!name.trim() || !Number.isFinite(price) || price <= 0) {
+          alert("সঠিক নাম ও দাম লিখুন।");
+          return;
+        }
+
+        try {
+          await updateDoc(
+            doc(db, "menu", food.id),
+            {
+              name: name.trim(),
+              price: price,
+              description: description.trim()
+            }
+          );
+
+          await loadFoods();
+          await renderAdminSection("menu");
+
+          alert("খাবারের তথ্য পরিবর্তন হয়েছে।");
+
+        } catch (error) {
+          alert("পরিবর্তন করা যায়নি: " + error.message);
+        }
+      };
+    });
+
     return;
   }
 
