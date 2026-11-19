@@ -1095,7 +1095,10 @@ async function uploadLogo() {
 }
 
 
-/* UPLOAD FOOD IMAGE */
+
+
+
+/* UPLOAD FOOD IMAGE - FIRESTORE */
 
 async function uploadFoodImage() {
   const file = $("foodFile")?.files[0];
@@ -1112,26 +1115,24 @@ async function uploadFoodImage() {
   }
 
   try {
-    const imageRef = ref(
-      storage,
-      `foods/${foodId}-${Date.now()}-${file.name}`
-    );
-
-    await uploadBytes(imageRef, file);
-    const url = await getDownloadURL(imageRef);
+    const imageData = await makeSmallImage(file);
 
     await updateDoc(
       doc(db, "menu", foodId),
-      { imageUrl: url }
+      { imageUrl: imageData }
     );
 
     await loadFoods();
+
     alert("খাবারের ছবি পরিবর্তন হয়েছে।");
 
+    await renderAdminSection("images");
+
   } catch (error) {
-    alert("ছবি Upload হয়নি: " + error.message);
+    alert("ছবি পরিবর্তন হয়নি: " + error.message);
   }
 }
+
 
 
 /* BUTTON EVENTS */
