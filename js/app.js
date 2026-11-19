@@ -1059,7 +1059,8 @@ async function saveFood() {
 }
 
 
-/* UPLOAD LOGO */
+
+/* UPLOAD LOGO - FIRESTORE */
 
 async function uploadLogo() {
   const file = $("logoFile")?.files[0];
@@ -1070,29 +1071,26 @@ async function uploadLogo() {
   }
 
   try {
-    const imageRef = ref(
-      storage,
-      `site/logo-${Date.now()}-${file.name}`
-    );
-
-    await uploadBytes(imageRef, file);
-    const url = await getDownloadURL(imageRef);
+    const imageData = await makeSmallImage(file);
 
     await setDoc(
       doc(db, "site", "contact"),
-      { logoUrl: url },
+      { logoUrl: imageData },
       { merge: true }
     );
 
     document.querySelectorAll(".site-logo, #siteLogo")
-      .forEach(img => img.src = url);
+      .forEach(img => img.src = imageData);
 
     alert("Logo পরিবর্তন হয়েছে।");
 
+    await renderAdminSection("images");
+
   } catch (error) {
-    alert("Logo Upload হয়নি: " + error.message);
+    alert("Logo পরিবর্তন হয়নি: " + error.message);
   }
 }
+
 
 
 
