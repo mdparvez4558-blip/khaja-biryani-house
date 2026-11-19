@@ -541,12 +541,7 @@ async function openAdmin(section = "orders") {
       button.onclick = async () => {
   const action = button.dataset.adminSection;
 
-  alert("বাটন কাজ করছে: " + action);
-
-  if (action === "settings") {
-    openSettings();
-    return;
-  }
+  
 
   try {
     await renderAdminSection(action);
@@ -566,7 +561,42 @@ await renderAdminSection(section);
 async function renderAdminSection(section) {
   const content = $("adminContent");
   if (!content) return;
+  /* SETTINGS MENU */
 
+  if (section === "settings") {
+    content.innerHTML = `
+      <h3>⚙️ Website Settings</h3>
+
+      <button class="stat" data-setting="menu">
+        🍛 Menu Management
+      </button>
+
+      <button class="stat" data-setting="images">
+        🖼️ ছবি
+      </button>
+
+      <button class="stat" data-setting="contact">
+        📞 Contact Settings
+      </button>
+
+      <button class="stat" data-setting="offer">
+        🎁 Offer Settings
+      </button>
+
+      <button class="stat" data-setting="admins">
+        👥 Admin Management
+      </button>
+    `;
+
+    content.querySelectorAll("[data-setting]")
+      .forEach(button => {
+        button.onclick = async () => {
+          await renderAdminSection(button.dataset.setting);
+        };
+      });
+
+    return;
+  }
 
   /* ALL ORDERS */
 
