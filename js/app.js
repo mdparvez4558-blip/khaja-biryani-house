@@ -87,6 +87,58 @@ function validImage(file) {
   return true;
 }
 
+/* COMPRESS IMAGE WITHOUT FIREBASE STORAGE */
+
+async function makeSmallImage(file) {
+  const dataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve, reject) => {
+    const picture = new Image();
+
+    picture.onload = () => resolve(picture);
+    picture.onerror = reject;
+
+    picture.src = dataUrl;
+  });
+
+  const maxSide = 800;
+
+  const scale = Math.min(
+    1,
+    maxSide / Math.max(img.width, img.height)
+  );
+
+  const canvas = document.createElement("canvas");
+
+  canvas.width = Math.round(img.width * scale);
+  canvas.height = Math.round(img.height * scale);
+
+  const context = canvas.getContext("2d");
+
+  context.drawImage(
+    img,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const result = canvas.toDataURL("image/jpeg", 0.65);
+
+  if (result.length > 800000) {
+    throw new Error("ছবিটি আরও ছোট করে নির্বাচন করুন।");
+  }
+
+  return result;
+}
+
 
 /* LOGIN */
 
