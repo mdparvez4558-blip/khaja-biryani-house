@@ -1012,7 +1012,8 @@ ${foods.map(food => `
 }
 
 
-/* ADD FOOD */
+
+/* ADD FOOD - FIRESTORE */
 
 async function saveFood() {
   const name = $("mName").value.trim();
@@ -1031,13 +1032,7 @@ async function saveFood() {
     let imageUrl = "";
 
     if (file) {
-      const imageRef = ref(
-        storage,
-        `foods/${Date.now()}-${file.name}`
-      );
-
-      await uploadBytes(imageRef, file);
-      imageUrl = await getDownloadURL(imageRef);
+      imageUrl = await makeSmallImage(file);
     }
 
     await addDoc(collection(db, "menu"), {
@@ -1050,13 +1045,16 @@ async function saveFood() {
     });
 
     await loadFoods();
+
     alert("নতুন খাবার যোগ হয়েছে।");
+
     await renderAdminSection("menu");
 
   } catch (error) {
     alert("খাবার যোগ হয়নি: " + error.message);
   }
 }
+
 
 
 
