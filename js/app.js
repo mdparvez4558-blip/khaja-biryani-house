@@ -169,14 +169,32 @@ async function checkAdmin(currentUser) {
       doc(db, "admins", currentUser.uid)
     );
 
-    return snapshot.exists() &&
-      snapshot.data().active !== false;
+    if (!snapshot.exists()) {
+      alert("এই Gmail-এর UID দিয়ে Admin ডকুমেন্ট পাওয়া যায়নি।");
+      return false;
+    }
+
+    const data = snapshot.data();
+
+    if (data.active === false) {
+      alert("এই Admin অ্যাকাউন্টটি নিষ্ক্রিয়।");
+      return false;
+    }
+
+    return true;
 
   } catch (error) {
     console.error("Admin check:", error);
+
+    alert(
+      "Admin যাচাই করতে সমস্যা হয়েছে: " +
+      error.code + " " + error.message
+    );
+
     return false;
   }
 }
+
 
 
 /* PROFILE */
