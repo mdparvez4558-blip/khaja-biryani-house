@@ -980,54 +980,49 @@ ${foods.map(food => `
   }
 
 
-  /* ADMIN MANAGEMENT */
 
-  if (section === "admins") {
-    content.innerHTML = `
-      <h3>👥 Admin Management</h3>
-      <p>নতুন Admin যোগ করার জন্য তার Gmail লিখুন।</p>
+if (section === "admins") {
+  content.innerHTML = `
+    <h3>👥 Admin Management</h3>
+    <p>নতুন Admin-এর Firebase UID লিখুন।</p>
 
-      <label>
-        Admin Gmail
-        <input id="newAdminEmail" type="email">
-      </label>
+    <label>
+      Admin UID
+      <input id="newAdminUid" type="text"
+        placeholder="এখানে UID লিখুন">
+    </label>
 
-      <button class="save" id="addAdminBtn">
-        Admin যোগ করুন
-      </button>
+    <button class="save" id="addAdminBtn">
+      Admin যোগ করুন
+    </button>
+  `;
 
-      <p class="muted">
-        এই সুবিধার জন্য Firebase Cloud Function
-        addAdminByEmail আগে থেকে চালু থাকতে হবে।
-      </p>
-    `;
+  $("addAdminBtn").onclick = async () => {
+    const uid = $("newAdminUid").value.trim();
 
-    $("addAdminBtn").onclick = async () => {
-      const email = $("newAdminEmail").value.trim();
+    if (!uid) {
+      alert("Admin UID লিখুন।");
+      return;
+    }
 
-      if (!email) {
-        alert("Gmail লিখুন।");
-        return;
-      }
+    try {
+      await setDoc(doc(db, "admins", uid), {
+        role: "admin",
+        active: true,
+        createdAt: serverTimestamp()
+      }, { merge: true });
 
-      try {
-        const addAdmin = httpsCallable(
-          functions,
-          "addAdminByEmail"
-        );
+      alert("নতুন Admin সফলভাবে যোগ হয়েছে।");
+      $("newAdminUid").value = "";
 
-        await addAdmin({ email });
+    } catch (error) {
+      alert("Admin যোগ হয়নি: " + error.message);
+    }
+  };
 
-        alert("Admin যোগ করার অনুরোধ সফল হয়েছে।");
-
-      } catch (error) {
-        alert("Admin যোগ হয়নি: " + error.message);
-      }
-    };
-
-    return;
-  }
+  return;
 }
+
 
 
 
