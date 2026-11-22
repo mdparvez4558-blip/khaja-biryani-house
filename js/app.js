@@ -1023,7 +1023,7 @@ if (section === "admins") {
   return;
 }
 
-
+}
 
 
 /* ADD FOOD - FIRESTORE */
