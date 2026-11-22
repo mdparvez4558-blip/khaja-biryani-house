@@ -617,7 +617,9 @@ async function openAdmin(section = "orders") {
       <button class="stat" data-admin-section="settings">
         ⚙️ Settings
       </button>
-
+<button class="stat" data-admin-section="customers">
+  👥 গ্রাহক তালিকা
+</button>
     </div>
 
     <div id="adminContent" class="admin-section">
