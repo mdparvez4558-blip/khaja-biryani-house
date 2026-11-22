@@ -229,10 +229,30 @@ function openProfile() {
 }
 
 
+
 /* AUTH STATE */
 
 onAuthStateChanged(auth, async currentUser => {
   user = currentUser;
+
+  // Customer account Firestore-এ সংরক্ষণ
+  if (currentUser) {
+    try {
+      await setDoc(
+        doc(db, "customers", currentUser.uid),
+        {
+          uid: currentUser.uid,
+          name: currentUser.displayName || "",
+          email: currentUser.email || "",
+          lastLoginAt: serverTimestamp()
+        },
+        { merge: true }
+      );
+    } catch (error) {
+      console.error("Customer save error:", error);
+    }
+  }
+
   isAdmin = await checkAdmin(user);
 
   renderProfile();
@@ -250,6 +270,7 @@ onAuthStateChanged(auth, async currentUser => {
    site/contact
    site/offers
 */
+
 
 async function loadSettings() {
   try {
