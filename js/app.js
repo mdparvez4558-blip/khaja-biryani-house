@@ -980,10 +980,10 @@ ${foods.map(food => `
   }
 
 
-
 if (section === "admins") {
   content.innerHTML = `
     <h3>👥 Admin Management</h3>
+
     <p>নতুন Admin-এর Firebase UID লিখুন।</p>
 
     <label>
@@ -995,8 +995,13 @@ if (section === "admins") {
     <button class="save" id="addAdminBtn">
       Admin যোগ করুন
     </button>
+
+    <hr>
+    <h3>📋 Admin তালিকা</h3>
+    <div id="adminList">লোড হচ্ছে...</div>
   `;
 
+  // নতুন Admin যোগ
   $("addAdminBtn").onclick = async () => {
     const uid = $("newAdminUid").value.trim();
 
@@ -1005,23 +1010,113 @@ if (section === "admins") {
       return;
     }
 
+    if (uid === user.uid) {
+      alert("নিজেকে আবার Admin হিসেবে যোগ করার প্রয়োজন নেই।");
+      return;
+    }
+
     try {
-      await setDoc(doc(db, "admins", uid), {
+      const adminRef = doc(db, "admins", uid);
+      const existing = await getDoc(adminRef);
+
+      if (existing.exists()) {
+        alert("এই UID আগে থেকেই Admin তালিকায় আছে।");
+        return;
+      }
+
+      await setDoc(adminRef, {
         role: "admin",
         active: true,
         createdAt: serverTimestamp()
-      }, { merge: true });
+      });
 
       alert("নতুন Admin সফলভাবে যোগ হয়েছে।");
       $("newAdminUid").value = "";
+
+      await renderAdminSection("admins");
 
     } catch (error) {
       alert("Admin যোগ হয়নি: " + error.message);
     }
   };
 
+  // Admin তালিকা দেখানো
+  try {
+    const snapshot = await getDocs(collection(db, "admins"));
+    const list = $("adminList");
+
+    if (snapshot.empty) {
+      list.innerHTML = "<p>কোনো Admin পাওয়া যায়নি।</p>";
+    } else {
+      list.innerHTML = snapshot.docs.map(item => {
+        const uid = item.id;
+        const data = item.data();
+        const active = data.active !== false;
+        const isSelf = uid === user.uid;
+
+        return `
+          <div class="food-card" style="padding:12px;margin:10px 0;">
+            <p><b>Admin UID:</b></p>
+            <p style="word-break:break-all;">
+              ${escapeHtml(uid)}
+            </p>
+
+            <p>অবস্থা:
+              <b>${active ? "সক্রিয়" : "নিষ্ক্রিয়"}</b>
+            </p>
+
+            ${
+              isSelf
+                ? "<p>এটি আপনার নিজের Admin অ্যাকাউন্ট।</p>"
+                : `
+                  <button
+                    class="save admin-toggle"
+                    data-uid="${escapeHtml(uid)}"
+                    data-active="${active}">
+                    ${active ? "নিষ্ক্রিয় করুন" : "আবার সক্রিয় করুন"}
+                  </button>
+                `
+            }
+          </div>
+        `;
+      }).join("");
+
+      list.querySelectorAll(".admin-toggle").forEach(button => {
+        button.onclick = async () => {
+          const uid = button.dataset.uid;
+          const nextActive = button.dataset.active !== "true";
+
+          const confirmText = nextActive
+            ? "এই Admin-কে আবার সক্রিয় করবেন?"
+            : "এই Admin-কে নিষ্ক্রিয় করবেন?";
+
+          if (!confirm(confirmText)) return;
+
+          try {
+            await updateDoc(doc(db, "admins", uid), {
+              active: nextActive
+            });
+
+            alert("Admin-এর অবস্থা পরিবর্তন হয়েছে।");
+
+            await renderAdminSection("admins");
+
+          } catch (error) {
+            alert("পরিবর্তন হয়নি: " + error.message);
+          }
+        };
+      });
+    }
+
+  } catch (error) {
+    $("adminList").innerHTML =
+      "<p>Admin তালিকা লোড হয়নি: " +
+      escapeHtml(error.message) + "</p>";
+  }
+
   return;
 }
+
 
 }
 
