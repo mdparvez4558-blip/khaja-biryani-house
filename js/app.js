@@ -234,26 +234,42 @@ function openProfile() {
 
 onAuthStateChanged(auth, async currentUser => {
   user = currentUser;
+  isAdmin = await checkAdmin(user);
 
-  // Customer account Firestore-এ সংরক্ষণ
   if (currentUser) {
     try {
+      const customerRef = doc(db, "customers", currentUser.uid);
+      const customerSnap = await getDoc(customerRef);
+
+      // নিষ্ক্রিয় গ্রাহকের প্রবেশ বন্ধ
+      if (
+        !isAdmin &&
+        customerSnap.exists() &&
+        customerSnap.data().active === false
+      ) {
+        alert("আপনার অ্যাকাউন্টটি বর্তমানে নিষ্ক্রিয়।");
+        await signOut(auth);
+        return;
+      }
+
       await setDoc(
-        doc(db, "customers", currentUser.uid),
+        customerRef,
         {
           uid: currentUser.uid,
           name: currentUser.displayName || "",
           email: currentUser.email || "",
+          active: customerSnap.exists()
+            ? customerSnap.data().active !== false
+            : true,
           lastLoginAt: serverTimestamp()
         },
         { merge: true }
       );
+
     } catch (error) {
       console.error("Customer save error:", error);
     }
   }
-
-  isAdmin = await checkAdmin(user);
 
   renderProfile();
 
