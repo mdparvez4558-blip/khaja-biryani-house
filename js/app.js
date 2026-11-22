@@ -1002,7 +1002,53 @@ ${foods.map(food => `
     return;
   }
 
+// CUSTOMER ACCOUNT MANAGEMENT
 
+if (section === "customers") {
+  content.innerHTML = `
+    <h3>👥 গ্রাহক তালিকা</h3>
+    <div id="customerList">লোড হচ্ছে...</div>
+  `;
+
+  try {
+    const snapshot = await getDocs(
+      collection(db, "customers")
+    );
+
+    const list = $("customerList");
+
+    if (snapshot.empty) {
+      list.innerHTML = "<p>এখনো কোনো গ্রাহক Login করেনি।</p>";
+    } else {
+      list.innerHTML = snapshot.docs.map(item => {
+        const data = item.data();
+
+        return `
+          <div class="food-card" style="padding:12px;margin:10px 0;">
+            <p><b>নাম:</b> ${escapeHtml(data.name || "নাম নেই")}</p>
+            <p><b>Gmail:</b> ${escapeHtml(data.email || "ইমেইল নেই")}</p>
+            <p><b>UID:</b></p>
+            <p style="word-break:break-all;">
+              ${escapeHtml(item.id)}
+            </p>
+            <p><b>শেষ Login:</b> ${
+              data.lastLoginAt?.toDate
+                ? escapeHtml(data.lastLoginAt.toDate().toLocaleString("bn-BD"))
+                : "তথ্য নেই"
+            }</p>
+          </div>
+        `;
+      }).join("");
+    }
+
+  } catch (error) {
+    $("customerList").innerHTML =
+      "<p>গ্রাহক তালিকা লোড হয়নি: " +
+      escapeHtml(error.message) + "</p>";
+  }
+
+  return;
+}
 if (section === "admins") {
   content.innerHTML = `
     <h3>👥 Admin Management</h3>
