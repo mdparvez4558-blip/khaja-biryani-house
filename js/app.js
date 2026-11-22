@@ -1038,6 +1038,7 @@ if (section === "customers") {
     } else {
       list.innerHTML = snapshot.docs.map(item => {
         const data = item.data();
+        const active = data.active !== false;
 
         return `
           <div class="food-card" style="padding:12px;margin:10px 0;">
@@ -1052,9 +1053,46 @@ if (section === "customers") {
                 ? escapeHtml(data.lastLoginAt.toDate().toLocaleString("bn-BD"))
                 : "তথ্য নেই"
             }</p>
+
+            <p>অ্যাকাউন্টের অবস্থা:
+              <b>${active ? "সক্রিয়" : "নিষ্ক্রিয়"}</b>
+            </p>
+
+            <button
+              class="save customer-toggle"
+              data-uid="${escapeHtml(item.id)}"
+              data-active="${active}">
+              ${active ? "নিষ্ক্রিয় করুন" : "আবার সক্রিয় করুন"}
+            </button>
           </div>
         `;
       }).join("");
+
+      list.querySelectorAll(".customer-toggle").forEach(button => {
+        button.onclick = async () => {
+          const uid = button.dataset.uid;
+          const nextActive = button.dataset.active !== "true";
+
+          const message = nextActive
+            ? "এই গ্রাহকের অ্যাকাউন্ট আবার সক্রিয় করবেন?"
+            : "এই গ্রাহকের অ্যাকাউন্ট নিষ্ক্রিয় করবেন?";
+
+          if (!confirm(message)) return;
+
+          try {
+            await updateDoc(doc(db, "customers", uid), {
+              active: nextActive
+            });
+
+            alert("গ্রাহকের অ্যাকাউন্টের অবস্থা পরিবর্তন হয়েছে।");
+
+            await renderAdminSection("customers");
+
+          } catch (error) {
+            alert("পরিবর্তন হয়নি: " + error.message);
+          }
+        };
+      });
     }
 
   } catch (error) {
@@ -1065,6 +1103,7 @@ if (section === "customers") {
 
   return;
 }
+
 if (section === "admins") {
   content.innerHTML = `
     <h3>👥 Admin Management</h3>
