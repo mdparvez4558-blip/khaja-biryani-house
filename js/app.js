@@ -455,6 +455,7 @@ function openOrder(foodId) {
 }
 
 
+
 /* ORDER SUBMIT */
 
 async function submitOrder() {
@@ -484,6 +485,21 @@ async function submitOrder() {
     return;
   }
 
+  // OFFER CALCULATION
+  const price = Number(food.price || 0);
+  const subtotal = price * quantity;
+
+  const offerApplied = offerSettings.enabled === true;
+  const discountPercent = offerApplied
+    ? Number(offerSettings.discountPercent || 0)
+    : 0;
+
+  const discount = Math.round(
+    subtotal * discountPercent / 100
+  );
+
+  const total = subtotal - discount;
+
   const order = {
     customerUid: user.uid,
     customerEmail: user.email || "",
@@ -492,9 +508,13 @@ async function submitOrder() {
     address,
     foodId: food.id,
     foodName: food.name,
-    price: Number(food.price || 0),
+    price,
     quantity,
-    total: Number(food.price || 0) * quantity,
+    subtotal,
+    offerApplied,
+    discountPercent,
+    discount,
+    total,
     note,
     status: "pending",
     createdAt: serverTimestamp()
@@ -514,7 +534,9 @@ async function submitOrder() {
 ঠিকানা: ${address}
 খাবার: ${food.name}
 পরিমাণ: ${quantity}
-মোট: ৳ ${order.total}
+মূল দাম: ৳ ${subtotal}
+ছাড়: ৳ ${discount}
+ছাড়ের পর মোট: ৳ ${total}
 নোট: ${note}`;
 
     window.open(
@@ -523,7 +545,11 @@ async function submitOrder() {
       "_blank"
     );
 
-    alert("অর্ডার জমা হয়েছে।");
+    alert(
+      offerApplied && discount > 0
+        ? "অফারসহ অর্ডার জমা হয়েছে।"
+        : "অর্ডার জমা হয়েছে।"
+    );
 
     hide("orderModal");
 
@@ -531,6 +557,7 @@ async function submitOrder() {
     alert("অর্ডার জমা হয়নি:\n" + error.message);
   }
 }
+
 
 
 
