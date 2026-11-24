@@ -490,7 +490,10 @@ async function submitOrder() {
   const customerName = $("customerName")?.value.trim() || "";
   const phone = $("customerPhone")?.value.trim() || "";
   const address = $("customerAddress")?.value.trim() || "";
-  const quantity = Math.max(1, Number($("foodQty")?.value || 1));
+  const quantity = Math.max(
+    1,
+    Number($("foodQty")?.value || 1)
+  );
   const note = $("orderNote")?.value.trim() || "";
 
   if (!customerName || !phone || !address) {
@@ -498,47 +501,74 @@ async function submitOrder() {
     return;
   }
 
-  // OFFER CALCULATION
-  const price = Number(food.price || 0);
-  const subtotal = price * quantity;
-
-  const offerApplied = offerSettings.enabled === true;
-  const discountPercent = offerApplied
-    ? Number(offerSettings.discountPercent || 0)
-    : 0;
-
-  const discount = Math.round(
-    subtotal * discountPercent / 100
-  );
-
-  const total = subtotal - discount;
-
-  const order = {
-    customerUid: user.uid,
-    customerEmail: user.email || "",
-    customerName,
-    phone,
-    address,
-    foodId: food.id,
-    foodName: food.name,
-    price,
-    quantity,
-    subtotal,
-    offerApplied,
-    discountPercent,
-    discount,
-    total,
-    note,
-    status: "pending",
-    createdAt: serverTimestamp()
-  };
-
   try {
+    // সর্বশেষ অফার সেটিংস Firestore থেকে পড়া
+    const offerDoc = await getDoc(
+      doc(db, "site", "offers")
+    );
+
+    const offerData = offerDoc.exists()
+      ? offerDoc.data()
+      : {};
+
+    offerSettings = {
+      enabled: offerData.enabled !== false,
+      discountPercent: Math.min(
+        100,
+        Math.max(
+          0,
+          Number(offerData.discountPercent ?? 20)
+        )
+      )
+    };
+
+    // খাবারের দাম হিসাব
+    const price = Number(food.price || 0);
+    const subtotal = price * quantity;
+
+    // অফার চালু থাকলে ছাড়
+    const offerApplied =
+      offerSettings.enabled === true &&
+      offerSettings.discountPercent > 0;
+
+    const discountPercent = offerApplied
+      ? offerSettings.discountPercent
+      : 0;
+
+    const discount = Math.round(
+      subtotal * discountPercent / 100
+    );
+
+    const total = subtotal - discount;
+
+    // অর্ডারের তথ্য
+    const order = {
+      customerUid: user.uid,
+      customerEmail: user.email || "",
+      customerName,
+      phone,
+      address,
+      foodId: food.id,
+      foodName: food.name,
+      price,
+      quantity,
+      subtotal,
+      offerApplied,
+      discountPercent,
+      discount,
+      total,
+      note,
+      status: "pending",
+      createdAt: serverTimestamp()
+    };
+
+    // Firestore-এ অর্ডার জমা
     const orderRef = await addDoc(
       collection(db, "orders"),
       order
     );
 
+    // WhatsApp মেসেজ
     const message =
       `খাজা বিরানি হাউজ অর্ডার
 অর্ডার নম্বর: ${orderRef.id}
@@ -567,7 +597,9 @@ async function submitOrder() {
     hide("orderModal");
 
   } catch (error) {
-    alert("অর্ডার জমা হয়নি:\n" + error.message);
+    alert(
+      "অর্ডার জমা হয়নি:\n" + error.message
+    );
   }
 }
 
