@@ -296,6 +296,9 @@ onAuthStateChanged(auth, async currentUser => {
 
 
 
+
+/* SETTINGS LOAD */
+
 async function loadSettings() {
   try {
     const contactDoc = await getDoc(
@@ -338,10 +341,19 @@ async function loadSettings() {
         contact.address || "ঢাকা, বাংলাদেশ";
     }
 
+    // OFFER DISPLAY
     if ($("offerText")) {
-      $("offerText").textContent =
-        offer.text || offer.title ||
-        "আমাদের বিশেষ অফার।";
+      if (
+        offerSettings.enabled &&
+        offerSettings.discountPercent > 0
+      ) {
+        $("offerText").textContent =
+          offer.text || offer.title ||
+          "আমাদের বিশেষ অফার।";
+      } else {
+        $("offerText").textContent =
+          "বর্তমানে কোনো অফার চালু নেই।";
+      }
     }
 
     if ($("aboutText") && offer.about) {
@@ -357,6 +369,7 @@ async function loadSettings() {
     console.error("Settings load error:", error);
   }
 }
+
 
 
 
