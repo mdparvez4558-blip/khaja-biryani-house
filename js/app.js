@@ -53,6 +53,13 @@ let user = null;
 let isAdmin = false;
 let foods = [];
 let editingFoodId = null;
+
+// OFFER SETTINGS
+let offerSettings = {
+  enabled: true,
+  discountPercent: 20
+};
+
 const $ = id => document.getElementById(id);
 
 const show = id => $(id)?.classList.add("show");
