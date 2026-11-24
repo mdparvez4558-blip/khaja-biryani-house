@@ -1017,18 +1017,50 @@ ${foods.map(food => `
   }
 
 
+  
   /* OFFER SETTINGS */
 
   if (section === "offer") {
     const snap = await getDoc(doc(db, "site", "offers"));
     const data = snap.exists() ? snap.data() : {};
 
+    const enabled = data.enabled !== false;
+    const discountPercent = Math.min(
+      100,
+      Math.max(0, Number(data.discountPercent ?? 20))
+    );
+
     content.innerHTML = `
       <h3>🎁 অফার ও পরিচিতি</h3>
 
       <label>
+        অফার চালু / বন্ধ
+        <input
+          id="sOfferEnabled"
+          type="checkbox"
+          ${enabled ? "checked" : ""}
+        >
+        অফার চালু রাখুন
+      </label>
+
+      <label>
+        ছাড়ের পরিমাণ (%)
+        <input
+          id="sDiscountPercent"
+          type="number"
+          min="0"
+          max="100"
+          step="1"
+          value="${discountPercent}"
+        >
+      </label>
+
+      <label>
         অফারের শিরোনাম
-        <input id="sTitle" value="${escapeHtml(data.title || "")}">
+        <input
+          id="sTitle"
+          value="${escapeHtml(data.title || "")}"
+        >
       </label>
 
       <label>
@@ -1041,19 +1073,37 @@ ${foods.map(food => `
         <textarea id="sAbout">${escapeHtml(data.about || "")}</textarea>
       </label>
 
-      <button class="save" id="saveSettings">Save</button>
+      <button class="save" id="saveSettings">
+        Save
+      </button>
     `;
 
     $("saveSettings").onclick = async () => {
       try {
+        const percent = Number(
+          $("sDiscountPercent").value
+        );
+
+        if (
+          !Number.isFinite(percent) ||
+          percent < 0 ||
+          percent > 100
+        ) {
+          alert("ছাড়ের পরিমাণ ০ থেকে ১০০-এর মধ্যে দিন।");
+          return;
+        }
+
         await setDoc(doc(db, "site", "offers"), {
+          enabled: $("sOfferEnabled").checked,
+          discountPercent: percent,
           title: $("sTitle").value.trim(),
           text: $("sOffer").value.trim(),
           about: $("sAbout").value.trim()
         }, { merge: true });
 
         await loadSettings();
-        alert("অফার ও পরিচিতি সংরক্ষণ হয়েছে।");
+
+        alert("অফার সেটিংস সংরক্ষণ হয়েছে।");
 
       } catch (error) {
         alert("সংরক্ষণ হয়নি: " + error.message);
@@ -1062,6 +1112,7 @@ ${foods.map(food => `
 
     return;
   }
+
 
 // CUSTOMER ACCOUNT MANAGEMENT
 
