@@ -295,6 +295,7 @@ onAuthStateChanged(auth, async currentUser => {
 */
 
 
+
 async function loadSettings() {
   try {
     const contactDoc = await getDoc(
@@ -312,6 +313,15 @@ async function loadSettings() {
     const offer = offerDoc.exists()
       ? offerDoc.data()
       : {};
+
+    // OFFER SETTINGS LOAD
+    offerSettings = {
+      enabled: offer.enabled !== false,
+      discountPercent: Math.min(
+        100,
+        Math.max(0, Number(offer.discountPercent ?? 20))
+      )
+    };
 
     if ($("phone1")) {
       $("phone1").textContent =
@@ -347,6 +357,7 @@ async function loadSettings() {
     console.error("Settings load error:", error);
   }
 }
+
 
 
 /* MENU LOAD
