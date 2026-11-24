@@ -515,15 +515,36 @@ async function submitOrder() {
 }
 
 
+
 /* MY ORDERS */
 
+// অর্ডারের তারিখ ও সময় তৈরি
 function orderHtml(id, order, admin = false) {
+
+  const orderDate = order.createdAt?.toDate
+    ? order.createdAt.toDate().toLocaleString("bn-BD", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      })
+    : "তারিখ পাওয়া যায়নি";
+
   return `
     <div class="order-row">
+
       <b>অর্ডার: #${escapeHtml(id)}</b><br>
+
       খাবার: ${escapeHtml(order.foodName || "")}<br>
+
       পরিমাণ: ${Number(order.quantity || 1)}<br>
+
       মোট: ৳ ${Number(order.total || 0)}<br>
+
+      অর্ডারের তারিখ ও সময়:
+      ${escapeHtml(orderDate)}<br>
+
       অবস্থা: ${escapeHtml(order.status || "pending")}<br>
 
       ${admin ? `
@@ -539,11 +560,13 @@ function orderHtml(id, order, admin = false) {
           <option value="cancelled">Cancelled</option>
         </select>
       ` : ""}
+
     </div>
   `;
 }
 
 async function openOrders() {
+
   show("ordersModal");
 
   if (!user) {
@@ -555,6 +578,7 @@ async function openOrders() {
   $("myOrders").textContent = "লোড হচ্ছে...";
 
   try {
+
     const ordersQuery = query(
       collection(db, "orders"),
       where("customerUid", "==", user.uid),
@@ -568,10 +592,13 @@ async function openOrders() {
       .join("") || "<p>এখনো কোনো অর্ডার নেই।</p>";
 
   } catch (error) {
+
     $("myOrders").textContent =
       "অর্ডার লোড হয়নি: " + error.message;
+
   }
 }
+
 
 
 /* SETTINGS MENU */
