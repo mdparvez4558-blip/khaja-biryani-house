@@ -607,6 +607,7 @@ async function submitOrder() {
 
 
 
+
 /* MY ORDERS */
 
 // অর্ডারের তারিখ, সময় ও টাকার হিসাব
@@ -660,18 +661,15 @@ function orderHtml(id, order, admin = false) {
         ">
           <h4>🧾 অর্ডারের টাকার হিসাব</h4>
 
-          <p>
-            মূল দাম:
+          <p>মূল দাম:
             <strong>৳ ${money(subtotal)}</strong>
           </p>
 
-          <p>
-            ছাড়ের হার:
+          <p>ছাড়ের হার:
             <strong>${money(discountPercent)}%</strong>
           </p>
 
-          <p>
-            মোট ছাড়:
+          <p>মোট ছাড়:
             <strong>৳ ${money(discount)}</strong>
           </p>
 
@@ -705,10 +703,242 @@ function orderHtml(id, order, admin = false) {
         </select>
       ` : ""}
 
+      <button
+        type="button"
+        data-receipt="${escapeHtml(id)}"
+        style="
+          width:100%;
+          padding:12px;
+          margin-top:12px;
+          background:#702512;
+          color:white;
+          border:0;
+          border-radius:8px;
+          font-size:16px;
+        "
+      >
+        🧾 রসিদ দেখুন / প্রিন্ট করুন
+      </button>
+
     </div>
   `;
 }
 
+
+/* PRINT ORDER RECEIPT */
+
+async function printOrderReceipt(id) {
+
+  // আগে প্রিন্ট উইন্ডো খোলা
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("রসিদ খুলতে সমস্যা হয়েছে। ব্রাউজারের Pop-up অনুমতি দিন।");
+    return;
+  }
+
+  try {
+
+    const orderSnap = await getDoc(
+      doc(db, "orders", id)
+    );
+
+    if (!orderSnap.exists()) {
+      printWindow.close();
+      alert("অর্ডারটি পাওয়া যায়নি।");
+      return;
+    }
+
+    const order = orderSnap.data();
+
+    const quantity = Number(order.quantity || 1);
+
+    const subtotal = Number(
+      order.subtotal ??
+      Number(order.price || 0) * quantity
+    );
+
+    const discount = Number(order.discount ?? 0);
+
+    const discountPercent = Number(
+      order.discountPercent ?? 0
+    );
+
+    const total = Number(
+      order.total ?? subtotal - discount
+    );
+
+    const money = value =>
+      Number(value).toLocaleString("bn-BD");
+
+    const orderDate = order.createdAt?.toDate
+      ? order.createdAt.toDate().toLocaleString("bn-BD")
+      : "তারিখ পাওয়া যায়নি";
+
+    const receiptHTML = `
+      <!DOCTYPE html>
+      <html lang="bn">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>অর্ডার রসিদ - খাজা বিরানি হাউজ</title>
+
+        <style>
+          body {
+            font-family: sans-serif;
+            padding: 20px;
+            color: #333;
+          }
+
+          .receipt {
+            max-width: 500px;
+            margin: auto;
+            padding: 22px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+          }
+
+          h1, h3 {
+            text-align: center;
+            color: #702512;
+          }
+
+          .center {
+            text-align: center;
+          }
+
+          .total {
+            font-size: 22px;
+            font-weight: bold;
+          }
+
+          hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+          }
+
+          .print-btn {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            margin: 20px auto;
+            background: #702512;
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            font-size: 17px;
+          }
+
+          @media print {
+            .print-btn {
+              display: none;
+            }
+
+            .receipt {
+              border: none;
+            }
+          }
+        </style>
+      </head>
+
+      <body>
+
+        <div class="receipt">
+
+          <h1>খাজা বিরানি হাউজ</h1>
+          <h3>🧾 অর্ডার রসিদ</h3>
+
+          <hr>
+
+          <p><strong>অর্ডার নম্বর:</strong> #${escapeHtml(id)}</p>
+
+          <p><strong>গ্রাহকের নাম:</strong>
+            ${escapeHtml(order.customerName || "")}
+          </p>
+
+          <p><strong>ফোন:</strong>
+            ${escapeHtml(order.phone || "")}
+          </p>
+
+          <p><strong>ঠিকানা:</strong>
+            ${escapeHtml(order.address || "")}
+          </p>
+
+          <hr>
+
+          <p><strong>খাবার:</strong>
+            ${escapeHtml(order.foodName || "")}
+          </p>
+
+          <p><strong>পরিমাণ:</strong> ${quantity}</p>
+
+          <hr>
+
+          <p>মূল দাম: ৳ ${money(subtotal)}</p>
+
+          <p>ছাড়ের হার: ${money(discountPercent)}%</p>
+
+          <p>মোট ছাড়: ৳ ${money(discount)}</p>
+
+          <hr>
+
+          <p class="total">
+            সর্বমোট: ৳ ${money(total)}
+          </p>
+
+          <hr>
+
+          <p>অর্ডারের তারিখ: ${escapeHtml(orderDate)}</p>
+
+          <p>অর্ডারের অবস্থা:
+            ${escapeHtml(order.status || "pending")}
+          </p>
+
+          <hr>
+
+          <h3>ধন্যবাদ!</h3>
+          <p class="center">
+            খাজা বিরানি হাউজের সঙ্গে থাকার জন্য।
+          </p>
+
+          <button class="print-btn" onclick="window.print()">
+            🖨️ প্রিন্ট করুন / PDF সংরক্ষণ করুন
+          </button>
+
+        </div>
+
+      </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(receiptHTML);
+    printWindow.document.close();
+    printWindow.focus();
+
+  } catch (error) {
+
+    printWindow.close();
+
+    alert("রসিদ তৈরি হয়নি: " + error.message);
+
+  }
+}
+
+
+// গ্রাহক ও অ্যাডমিনের রসিদ বাটন
+document.addEventListener("click", event => {
+
+  const button = event.target.closest?.("[data-receipt]");
+
+  if (!button) return;
+
+  printOrderReceipt(button.dataset.receipt);
+
+});
+
+
+/* CUSTOMER ORDERS */
 
 async function openOrders() {
 
@@ -716,7 +946,7 @@ async function openOrders() {
 
   if (!user) {
     $("myOrders").innerHTML =
-      "<p>অর্ডার দেখতে Gmail দিয়ে Login করুন।</p>";
+      "<p>অর্ডার দেখতে Gmail দিয়ে Login করুন।";
     return;
   }
 
@@ -743,6 +973,7 @@ async function openOrders() {
 
   }
 }
+
 
 
 
