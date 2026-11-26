@@ -1575,6 +1575,7 @@ if ($("submitOrder")) {
 }
 
 
+
 /* WEBSITE START */
 
 if ($("year")) {
@@ -1583,3 +1584,75 @@ if ($("year")) {
 
 await loadSettings();
 await loadFoods();
+
+
+/* ORDER PRICE SUMMARY */
+
+function updateOrderSummary() {
+  const foodSelect = $("foodSelect");
+  const qtyInput = $("foodQty");
+
+  if (!foodSelect || !qtyInput) return;
+
+  const food = foods.find(
+    item => item.id === foodSelect.value
+  );
+
+  if (!food) {
+    $("orderSubtotal").textContent = "৳ ০";
+    $("orderDiscount").textContent = "৳ ০";
+    $("orderGrandTotal").textContent = "৳ ০";
+    $("orderOfferMessage").textContent = "খাবার নির্বাচন করুন।";
+    return;
+  }
+
+  const price = Number(food.price || 0);
+  const quantity = Math.max(
+    1,
+    Math.floor(Number(qtyInput.value) || 1)
+  );
+
+  const subtotal = price * quantity;
+
+  const offerApplied =
+    offerSettings.enabled === true &&
+    offerSettings.discountPercent > 0;
+
+  const discountPercent = offerApplied
+    ? Number(offerSettings.discountPercent)
+    : 0;
+
+  const discount = Math.round(
+    subtotal * discountPercent / 100
+  );
+
+  const total = subtotal - discount;
+
+  $("orderSubtotal").textContent = "৳ " + subtotal;
+  $("orderDiscount").textContent = "৳ " + discount;
+  $("orderGrandTotal").textContent = "৳ " + total;
+
+  $("orderOfferMessage").textContent =
+    offerApplied
+      ? discountPercent + "% ছাড় প্রয়োগ হয়েছে।"
+      : "বর্তমানে কোনো ছাড় নেই।";
+}
+
+
+// খাবার পরিবর্তন হলে হিসাব আপডেট
+$("foodSelect")?.addEventListener(
+  "change",
+  updateOrderSummary
+);
+
+
+// পরিমাণ পরিবর্তন হলে হিসাব আপডেট
+$("foodQty")?.addEventListener(
+  "input",
+  updateOrderSummary
+);
+
+
+// প্রথমবার হিসাব দেখানো
+updateOrderSummary();
+
