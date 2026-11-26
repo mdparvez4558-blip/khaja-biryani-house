@@ -606,9 +606,10 @@ async function submitOrder() {
 
 
 
+
 /* MY ORDERS */
 
-// অর্ডারের তারিখ ও সময় তৈরি
+// অর্ডারের তারিখ, সময় ও টাকার হিসাব
 function orderHtml(id, order, admin = false) {
 
   const orderDate = order.createdAt?.toDate
@@ -621,6 +622,26 @@ function orderHtml(id, order, admin = false) {
       })
     : "তারিখ পাওয়া যায়নি";
 
+  const quantity = Number(order.quantity || 1);
+  const price = Number(order.price || 0);
+
+  const subtotal = Number(
+    order.subtotal ?? price * quantity
+  );
+
+  const discount = Number(order.discount ?? 0);
+
+  const discountPercent = Number(
+    order.discountPercent ?? 0
+  );
+
+  const total = Number(
+    order.total ?? subtotal - discount
+  );
+
+  const money = value =>
+    Number(value).toLocaleString("bn-BD");
+
   return `
     <div class="order-row">
 
@@ -628,9 +649,42 @@ function orderHtml(id, order, admin = false) {
 
       খাবার: ${escapeHtml(order.foodName || "")}<br>
 
-      পরিমাণ: ${Number(order.quantity || 1)}<br>
+      পরিমাণ: ${quantity}<br>
 
-      মোট: ৳ ${Number(order.total || 0)}<br>
+      ${!admin ? `
+        <div style="
+          padding:12px;
+          margin:12px 0;
+          border:1px solid #ddd;
+          border-radius:10px;
+        ">
+          <h4>🧾 অর্ডারের টাকার হিসাব</h4>
+
+          <p>
+            মূল দাম:
+            <strong>৳ ${money(subtotal)}</strong>
+          </p>
+
+          <p>
+            ছাড়ের হার:
+            <strong>${money(discountPercent)}%</strong>
+          </p>
+
+          <p>
+            মোট ছাড়:
+            <strong>৳ ${money(discount)}</strong>
+          </p>
+
+          <hr>
+
+          <p style="font-size:18px;">
+            সর্বমোট:
+            <strong>৳ ${money(total)}</strong>
+          </p>
+        </div>
+      ` : `
+        মোট: ৳ ${money(total)}<br>
+      `}
 
       অর্ডারের তারিখ ও সময়:
       ${escapeHtml(orderDate)}<br>
@@ -654,6 +708,7 @@ function orderHtml(id, order, admin = false) {
     </div>
   `;
 }
+
 
 async function openOrders() {
 
@@ -688,6 +743,7 @@ async function openOrders() {
 
   }
 }
+
 
 
 
