@@ -437,58 +437,82 @@
   </footer>
 
   <!-- অর্ডার ফর্ম -->
-  <div id="orderModal" class="modal" role="dialog" aria-modal="true"
-       aria-labelledby="orderTitle">
-    <div class="modal-box">
-      <button class="close-btn" type="button" data-close="orderModal"
-              aria-label="বন্ধ করুন">×</button>
-      <h2 id="orderTitle">🛒 খাবার অর্ডার করুন</h2>
-      <p id="loginHint" class="muted">অর্ডার পাঠাতে Gmail দিয়ে Login করুন।</p>
+<div id="orderModal" class="modal" role="dialog" aria-modal="true"
+     aria-labelledby="orderTitle">
+  <div class="modal-box">
+    <button class="close-btn" type="button" data-close="orderModal"
+            aria-label="বন্ধ করুন">×</button>
 
-      <label>
-        আপনার নাম
-        <input id="customerName" type="text" autocomplete="name"
-               placeholder="সম্পূর্ণ নাম" required>
-      </label>
+    <h2 id="orderTitle">🛒 খাবার অর্ডার করুন</h2>
+    <p id="loginHint" class="muted">অর্ডার পাঠাতে Gmail দিয়ে Login করুন।</p>
 
-      <label>
-        ফোন নম্বর
-        <input id="customerPhone" type="tel" autocomplete="tel"
-               placeholder="01XXXXXXXXX" required>
-      </label>
+    <label>
+      আপনার নাম
+      <input id="customerName" type="text" autocomplete="name"
+             placeholder="সম্পূর্ণ নাম" required>
+    </label>
 
-      <label>
-        সম্পূর্ণ ঠিকানা
-        <textarea id="customerAddress" autocomplete="street-address"
-                  placeholder="বাসা, রাস্তা, এলাকা ও জেলা" required></textarea>
-      </label>
+    <label>
+      ফোন নম্বর
+      <input id="customerPhone" type="tel" autocomplete="tel"
+             placeholder="01XXXXXXXXX" required>
+    </label>
 
-      <label>
-        খাবার নির্বাচন করুন
-        <select id="foodSelect" required>
-          <option value="">খাবার লোড হচ্ছে...</option>
-        </select>
-      </label>
+    <label>
+      সম্পূর্ণ ঠিকানা
+      <textarea id="customerAddress" autocomplete="street-address"
+                placeholder="বাসা, রাস্তা, এলাকা ও জেলা" required></textarea>
+    </label>
 
-      <label>
-        পরিমাণ
-        <input id="foodQty" type="number" min="1" step="1"
-               value="1" required>
-      </label>
+    <label>
+      খাবার নির্বাচন করুন
+      <select id="foodSelect" required>
+        <option value="">খাবার লোড হচ্ছে...</option>
+      </select>
+    </label>
 
-      <label>
-        অতিরিক্ত নোট (ঐচ্ছিক)
-        <textarea id="orderNote" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"></textarea>
-      </label>
+    <label>
+      পরিমাণ
+      <input id="foodQty" type="number" min="1" step="1"
+             value="1" required>
+    </label>
 
-      <button id="submitOrder" class="primary" type="button" style="width:100%">
-        অর্ডার জমা দিন
-      </button>
-      <p class="muted">
-        অর্ডার পাঠানোর আগে আপনার নাম, ফোন ও ঠিকানা যাচাই করুন।
+    <!-- মোট দাম ও ছাড় -->
+    <div id="orderPriceSummary"
+         style="padding:15px; margin:15px 0; border:1px solid #ddd; border-radius:10px;">
+
+      <h3>🧾 অর্ডারের হিসাব</h3>
+
+      <p>মূল দাম: <strong id="orderSubtotal">৳ ০</strong></p>
+
+      <p>ছাড়: <strong id="orderDiscount">৳ ০</strong></p>
+
+      <hr>
+
+      <p style="font-size:20px;">
+        সর্বমোট:
+        <strong id="orderGrandTotal">৳ ০</strong>
+      </p>
+
+      <p id="orderOfferMessage" class="muted">
+        খাবার নির্বাচন করুন।
       </p>
     </div>
+
+    <label>
+      অতিরিক্ত নোট (ঐচ্ছিক)
+      <textarea id="orderNote" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"></textarea>
+    </label>
+
+    <button id="submitOrder" class="primary" type="button" style="width:100%">
+      অর্ডার জমা দিন
+    </button>
+
+    <p class="muted">
+      অর্ডার পাঠানোর আগে আপনার নাম, ফোন ও ঠিকানা যাচাই করুন।
+    </p>
   </div>
+</div>
 
   <!-- Profile -->
   <div id="profileModal" class="modal" role="dialog" aria-modal="true"
