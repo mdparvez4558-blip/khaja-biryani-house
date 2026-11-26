@@ -610,7 +610,7 @@ async function submitOrder() {
 
 /* MY ORDERS */
 
-// অর্ডারের তারিখ, সময় ও টাকার হিসাব
+// অর্ডারের তারিখ, টাকা ও স্ট্যাটাস ট্র্যাকিং
 function orderHtml(id, order, admin = false) {
 
   const orderDate = order.createdAt?.toDate
@@ -643,14 +643,137 @@ function orderHtml(id, order, admin = false) {
   const money = value =>
     Number(value).toLocaleString("bn-BD");
 
+  const statuses = [
+    {
+      value: "pending",
+      label: "Order Received",
+      icon: "📥"
+    },
+    {
+      value: "confirmed",
+      label: "Order Confirmed",
+      icon: "✅"
+    },
+    {
+      value: "preparing",
+      label: "Food Preparation",
+      icon: "🍽️"
+    },
+    {
+      value: "delivered",
+      label: "Delivered Successfully",
+      icon: "🚚"
+    }
+  ];
+
+  const currentStatus = statuses.some(
+    item => item.value === order.status
+  ) ? order.status : "pending";
+
+  const currentIndex = statuses.findIndex(
+    item => item.value === currentStatus
+  );
+
+  const isCancelled = order.status === "cancelled";
+
+  const tracker = isCancelled
+    ? `
+      <div style="
+        padding:15px;
+        margin:12px 0;
+        background:#fff0f0;
+        border:1px solid #e5aaaa;
+        border-radius:10px;
+        text-align:center;
+        color:#b42318;
+      ">
+        <div style="font-size:30px;">❌</div>
+        <strong>Order Cancelled</strong>
+        <p style="margin:5px 0 0;">
+          This order has been cancelled.
+        </p>
+      </div>
+    `
+    : `
+      <div style="
+        padding:14px 8px;
+        margin:12px 0;
+        background:#fffaf5;
+        border:1px solid #ead9ca;
+        border-radius:10px;
+      ">
+        <h4 style="
+          text-align:center;
+          margin:0 0 18px;
+          color:#702512;
+        ">
+          📦 Order Tracking
+        </h4>
+
+        <div style="
+          display:flex;
+          align-items:flex-start;
+          justify-content:space-between;
+          gap:2px;
+        ">
+          ${statuses.map((item, index) => `
+            <div style="
+              flex:1;
+              min-width:0;
+              text-align:center;
+            ">
+              <div style="
+                width:32px;
+                height:32px;
+                line-height:32px;
+                margin:auto;
+                border-radius:50%;
+                background:${index <= currentIndex ? "#702512" : "#ddd"};
+                color:white;
+                font-size:16px;
+              ">
+                ${index < currentIndex ? "✓" : item.icon}
+              </div>
+
+              <div style="
+                font-size:10px;
+                font-weight:${index === currentIndex ? "bold" : "normal"};
+                color:${index <= currentIndex ? "#702512" : "#888"};
+                margin-top:7px;
+                overflow-wrap:anywhere;
+              ">
+                ${item.label}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div style="
+          height:6px;
+          background:#ddd;
+          border-radius:10px;
+          margin:12px 8px 0;
+          overflow:hidden;
+        ">
+          <div style="
+            width:${currentIndex / 3 * 100}%;
+            height:100%;
+            background:#702512;
+            border-radius:10px;
+            transition:width .3s;
+          "></div>
+        </div>
+      </div>
+    `;
+
   return `
     <div class="order-row">
 
-      <b>অর্ডার: #${escapeHtml(id)}</b><br>
+      <b>Order: #${escapeHtml(id)}</b><br>
 
-      খাবার: ${escapeHtml(order.foodName || "")}<br>
+      Food: ${escapeHtml(order.foodName || "")}<br>
 
-      পরিমাণ: ${quantity}<br>
+      Quantity: ${quantity}<br>
 
       ${!admin ? `
         <div style="
@@ -684,23 +807,48 @@ function orderHtml(id, order, admin = false) {
         মোট: ৳ ${money(total)}<br>
       `}
 
-      অর্ডারের তারিখ ও সময়:
-      ${escapeHtml(orderDate)}<br>
+      <div style="margin-top:12px;">
+        ${tracker}
+      </div>
 
-      অবস্থা: ${escapeHtml(order.status || "pending")}<br>
+      <p>
+        Order Date & Time:
+        ${escapeHtml(orderDate)}
+      </p>
 
       ${admin ? `
         নাম: ${escapeHtml(order.customerName || "")}<br>
         ফোন: ${escapeHtml(order.phone || "")}<br>
         ঠিকানা: ${escapeHtml(order.address || "")}<br>
 
-        <select data-status="${escapeHtml(id)}">
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="preparing">Preparing</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+        <label style="display:block;margin-top:12px;">
+          Update Order Status:
+          <select
+            data-status="${escapeHtml(id)}"
+            style="
+              width:100%;
+              padding:10px;
+              margin-top:6px;
+              border-radius:8px;
+            "
+          >
+            ${statuses.map(item => `
+              <option
+                value="${item.value}"
+                ${currentStatus === item.value ? "selected" : ""}
+              >
+                ${item.label}
+              </option>
+            `).join("")}
+
+            <option
+              value="cancelled"
+              ${isCancelled ? "selected" : ""}
+            >
+              Order Cancelled
+            </option>
+          </select>
+        </label>
       ` : ""}
 
       <button
@@ -723,6 +871,8 @@ function orderHtml(id, order, admin = false) {
     </div>
   `;
 }
+
+
 
 
 /* PRINT ORDER RECEIPT */
