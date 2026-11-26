@@ -824,55 +824,116 @@ async function renderAdminSection(section) {
     return;
   }
 
-  /* ALL ORDERS */
+  
 
-  if (section === "orders") {
-    try {
-      const snapshot = await getDocs(
-        query(
-          collection(db, "orders"),
-          orderBy("createdAt", "desc")
-        )
-      );
+/* ALL ORDERS */
 
-      content.innerHTML =
-        "<h3>🛒 সব অর্ডার</h3>" +
-        snapshot.docs.map(item =>
-          orderHtml(item.id, item.data(), true)
-        ).join("") ||
-        "<p>কোনো অর্ডার নেই।</p>";
+if (section === "orders") {
+  try {
+    const snapshot = await getDocs(
+      query(
+        collection(db, "orders"),
+        orderBy("createdAt", "desc")
+      )
+    );
 
-      content.querySelectorAll("[data-status]")
-        .forEach(select => {
-          const item = snapshot.docs.find(
-            order => order.id === select.dataset.status
-          );
+    const money = value =>
+      Number(value || 0).toLocaleString("bn-BD");
 
-          if (item) {
-            select.value = item.data().status || "pending";
-          }
+    content.innerHTML =
+      "<h3>🛒 সব অর্ডার</h3>" +
+      (
+        snapshot.docs.length
+          ? snapshot.docs.map(item => {
+              const data = item.data();
 
-          select.onchange = async () => {
-            try {
-              await updateDoc(
-                doc(db, "orders", select.dataset.status),
-                { status: select.value }
+              const subtotal = Number(
+                data.subtotal ??
+                (Number(data.price || 0) *
+                 Number(data.quantity || 1))
               );
 
-              alert("অর্ডারের অবস্থা পরিবর্তন হয়েছে।");
+              const discount = Number(data.discount ?? 0);
 
-            } catch (error) {
-              alert("পরিবর্তন হয়নি: " + error.message);
-            }
-          };
-        });
+              const total = Number(
+                data.total ?? (subtotal - discount)
+              );
 
-    } catch (error) {
-      content.textContent = "অর্ডার লোড হয়নি: " + error.message;
-    }
+              const discountPercent = Number(
+                data.discountPercent ?? 0
+              );
 
-    return;
+              return `
+                ${orderHtml(item.id, data, true)}
+
+                <div style="
+                  padding:15px;
+                  margin:10px 0 20px;
+                  border:1px solid #ddd;
+                  border-radius:10px;
+                  background:#fff;
+                ">
+                  <h4>🧾 অর্ডারের টাকার হিসাব</h4>
+
+                  <p>
+                    মূল দাম:
+                    <strong>৳ ${money(subtotal)}</strong>
+                  </p>
+
+                  <p>
+                    ছাড়ের হার:
+                    <strong>${discountPercent}%</strong>
+                  </p>
+
+                  <p>
+                    মোট ছাড়:
+                    <strong>৳ ${money(discount)}</strong>
+                  </p>
+
+                  <hr>
+
+                  <p style="font-size:19px;">
+                    গ্রাহকের মোট বিল:
+                    <strong>৳ ${money(total)}</strong>
+                  </p>
+                </div>
+              `;
+            }).join("")
+          : "<p>কোনো অর্ডার নেই।</p>"
+      );
+
+    content.querySelectorAll("[data-status]")
+      .forEach(select => {
+        const item = snapshot.docs.find(
+          order => order.id === select.dataset.status
+        );
+
+        if (item) {
+          select.value = item.data().status || "pending";
+        }
+
+        select.onchange = async () => {
+          try {
+            await updateDoc(
+              doc(db, "orders", select.dataset.status),
+              { status: select.value }
+            );
+
+            alert("অর্ডারের অবস্থা পরিবর্তন হয়েছে।");
+
+          } catch (error) {
+            alert("পরিবর্তন হয়নি: " + error.message);
+          }
+        };
+      });
+
+  } catch (error) {
+    content.textContent =
+      "অর্ডার লোড হয়নি: " + error.message;
   }
+
+  return;
+}
 
 
   /* MENU MANAGEMENT */
