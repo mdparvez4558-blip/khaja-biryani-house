@@ -1263,6 +1263,7 @@ async function renderAdminSection(section) {
 
   
 
+
 /* ALL ORDERS */
 
 if (section === "orders") {
@@ -1300,8 +1301,32 @@ if (section === "orders") {
                 data.discountPercent ?? 0
               );
 
+              const showDeliveryButton =
+                data.status !== "delivered" &&
+                data.status !== "cancelled";
+
               return `
                 ${orderHtml(item.id, data, true)}
+
+                ${showDeliveryButton ? `
+                  <button
+                    type="button"
+                    data-mark-delivered="${escapeHtml(item.id)}"
+                    style="
+                      width:100%;
+                      padding:13px;
+                      margin:0 0 15px;
+                      background:#18794e;
+                      color:white;
+                      border:0;
+                      border-radius:8px;
+                      font-size:16px;
+                      font-weight:bold;
+                    "
+                  >
+                    🚚 Mark as Delivered
+                  </button>
+                ` : ""}
 
                 <div style="
                   padding:15px;
@@ -1339,6 +1364,7 @@ if (section === "orders") {
           : "<p>কোনো অর্ডার নেই।</p>"
       );
 
+    // আগের Status পরিবর্তনের ব্যবস্থা
     content.querySelectorAll("[data-status]")
       .forEach(select => {
         const item = snapshot.docs.find(
@@ -1364,6 +1390,45 @@ if (section === "orders") {
         };
       });
 
+    // Delivery Complete Button
+    content.querySelectorAll("[data-mark-delivered]")
+      .forEach(button => {
+
+        button.onclick = async () => {
+          const orderId = button.dataset.markDelivered;
+
+          const confirmed = confirm(
+            "আপনি কি নিশ্চিত যে খাবার গ্রাহকের হাতে পৌঁছে দেওয়া হয়েছে?"
+          );
+
+          if (!confirmed) return;
+
+          button.disabled = true;
+          button.textContent = "Updating...";
+
+          try {
+            await updateDoc(
+              doc(db, "orders", orderId),
+              {
+                status: "delivered",
+                deliveredAt: serverTimestamp()
+              }
+            );
+
+            alert("Delivery Successfully Completed!");
+
+            await renderAdminSection("orders");
+
+          } catch (error) {
+            button.disabled = false;
+            button.textContent = "🚚 Mark as Delivered";
+
+            alert("ডেলিভারি আপডেট হয়নি: " + error.message);
+          }
+        };
+
+      });
+
   } catch (error) {
     content.textContent =
       "অর্ডার লোড হয়নি: " + error.message;
@@ -1371,6 +1436,7 @@ if (section === "orders") {
 
   return;
 }
+
 
 
   /* MENU MANAGEMENT */
