@@ -475,6 +475,7 @@ function openOrder(foodId) {
 
 
 
+
 /* ORDER SUBMIT */
 
 async function submitOrder() {
@@ -507,8 +508,10 @@ async function submitOrder() {
     return;
   }
 
+  // আগে থেকেই WhatsApp-এর জন্য নতুন ট্যাব খোলা
+  const whatsappWindow = window.open("about:blank", "_blank");
+
   try {
-    // সর্বশেষ অফার সেটিংস Firestore থেকে পড়া
     const offerDoc = await getDoc(
       doc(db, "site", "offers")
     );
@@ -528,11 +531,9 @@ async function submitOrder() {
       )
     };
 
-    // খাবারের দাম হিসাব
     const price = Number(food.price || 0);
     const subtotal = price * quantity;
 
-    // অফার চালু থাকলে ছাড়
     const offerApplied =
       offerSettings.enabled === true &&
       offerSettings.discountPercent > 0;
@@ -547,7 +548,6 @@ async function submitOrder() {
 
     const total = subtotal - discount;
 
-    // অর্ডারের তথ্য
     const order = {
       customerUid: user.uid,
       customerEmail: user.email || "",
@@ -574,7 +574,7 @@ async function submitOrder() {
       order
     );
 
-    // WhatsApp মেসেজ
+    // WhatsApp মেসেজ তৈরি
     const message =
       `খাজা বিরানি হাউজ অর্ডার
 অর্ডার নম্বর: ${orderRef.id}
@@ -588,11 +588,11 @@ async function submitOrder() {
 ছাড়ের পর মোট: ৳ ${total}
 নোট: ${note}`;
 
-    window.open(
+    const whatsappUrl =
       "https://wa.me/8801785452580?text=" +
-      encodeURIComponent(message),
-      "_blank"
-    );
+      encodeURIComponent(message);
+
+    hide("orderModal");
 
     alert(
       offerApplied && discount > 0
@@ -600,14 +600,25 @@ async function submitOrder() {
         : "অর্ডার জমা হয়েছে।"
     );
 
-    hide("orderModal");
+    // আগে খোলা ট্যাবে WhatsApp চালু
+    if (whatsappWindow && !whatsappWindow.closed) {
+      whatsappWindow.location.href = whatsappUrl;
+    } else {
+      // Popup বন্ধ থাকলে বর্তমান ট্যাব থেকে WhatsApp খুলবে
+      window.location.href = whatsappUrl;
+    }
 
   } catch (error) {
+    if (whatsappWindow && !whatsappWindow.closed) {
+      whatsappWindow.close();
+    }
+
     alert(
       "অর্ডার জমা হয়নি:\n" + error.message
     );
   }
 }
+
 
 
 
