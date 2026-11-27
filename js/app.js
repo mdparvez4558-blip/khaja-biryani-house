@@ -243,14 +243,13 @@ onAuthStateChanged(auth, async currentUser => {
   user = currentUser;
   isAdmin = await checkAdmin(user);
 
-  if (currentUser) {
+  if (currentUser && !isAdmin) {
     try {
       const customerRef = doc(db, "customers", currentUser.uid);
       const customerSnap = await getDoc(customerRef);
 
-      // নিষ্ক্রিয় গ্রাহকের প্রবেশ বন্ধ
+      // আগে থেকে নিষ্ক্রিয় থাকলে প্রবেশ বন্ধ
       if (
-        !isAdmin &&
         customerSnap.exists() &&
         customerSnap.data().active === false
       ) {
@@ -259,22 +258,29 @@ onAuthStateChanged(auth, async currentUser => {
         return;
       }
 
-      await setDoc(
-        customerRef,
-        {
+      // নতুন গ্রাহকের অ্যাকাউন্ট তৈরি
+      if (!customerSnap.exists()) {
+        await setDoc(customerRef, {
           uid: currentUser.uid,
           name: currentUser.displayName || "",
           email: currentUser.email || "",
-          active: customerSnap.exists()
-            ? customerSnap.data().active !== false
-            : true,
+          active: true,
           lastLoginAt: serverTimestamp()
-        },
-        { merge: true }
-      );
+        });
+      } else {
+        // শুধু নিজের তথ্য ও লগইনের সময় আপডেট
+        await updateDoc(customerRef, {
+          name: currentUser.displayName || "",
+          email: currentUser.email || "",
+          lastLoginAt: serverTimestamp()
+        });
+      }
 
     } catch (error) {
       console.error("Customer save error:", error);
+      alert("অ্যাকাউন্ট যাচাই করা যায়নি। আবার চেষ্টা করুন।");
+      await signOut(auth);
+      return;
     }
   }
 
